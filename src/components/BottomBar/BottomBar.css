@@ -1,0 +1,6 @@
+.bottom-bar {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  box-shadow: 0px -1px 8px gray;
+}
