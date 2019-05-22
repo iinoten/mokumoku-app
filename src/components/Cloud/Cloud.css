@@ -1,0 +1,14 @@
+.cloud {
+  height: 40vw;
+  width: 40vw;
+  background-image: url("./mokumoku_cloud.png");
+  background-repeat: no-repeat;
+  background-size: cover
+}
+.sitenai_cloud {
+  height: 40vw;
+  width: 40vw;
+  background-image: url("./mokumokusitenai_cloud.png");
+  background-repeat: no-repeat;
+  background-size: cover
+}
