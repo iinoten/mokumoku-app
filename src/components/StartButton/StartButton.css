@@ -1,3 +1,16 @@
 #start-button {
   background-color: #66bb6a;
+  position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: 
+      translateY(-50%)
+      translateX(-50%);
+    /*webkitに対応*/
+      -webkit-transform: 
+        translateY(-50%)
+        translateX(-50%);
+      -ms-transform: 
+        translateY(-50%)
+        translateX(-50%);
 }
