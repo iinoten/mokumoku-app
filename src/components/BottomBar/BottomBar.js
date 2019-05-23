@@ -4,6 +4,7 @@ import './BottomBar.css'
 /*マテリアルUI導入*/
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import { withStyles } from "@material-ui/core/styles";
 
 /**マテリアルアイコン導入 */
 import FaceRounded from '@material-ui/icons/FaceRounded'
@@ -12,8 +13,12 @@ import PlaceOutlined from '@material-ui/icons/PlaceOutlined'
 
 const styles = {
   root: {
-    width: 500,
+    color: "gray",
+    "&$selected": {
+      color: "#31893d",
+    }
   },
+  selected: {}
 };
 class BottomBar extends Component{
   state = {
@@ -24,20 +29,29 @@ class BottomBar extends Component{
     this.setState({ value });
   };
   render(){
-    const { value } = this.state;
+    const actionClasses = this.props.classes;
     return(
-      <BottomNavigation
-        className="bottom-bar"
-        value={value}
-        onChange={this.handleChange}
-        showLabels
-      >
-        <BottomNavigationAction label="account" icon={<FaceRounded />} />
-        <BottomNavigationAction label="mokumoku" icon={<ComputerOutlined />} />
-        <BottomNavigationAction label="serch" icon={<PlaceOutlined />} />
-      </BottomNavigation>
+      <BottomNavigation value={this.state.value} showLabels={true} onChange={this.handleChange} className="bottom-bar" >
+          <BottomNavigationAction
+            classes={actionClasses}
+            label="Account"
+            icon={<FaceRounded/>}
+          />
+
+          <BottomNavigationAction
+            classes={actionClasses}
+            label="Mokumoku"
+            icon={<ComputerOutlined/>}
+          />
+
+          <BottomNavigationAction
+            classes={actionClasses}
+            label="Serch"
+            icon={<PlaceOutlined />}
+          />
+        </BottomNavigation>
     );
   }
 }
 
-export default BottomBar;
+export default withStyles(styles)(BottomBar);
