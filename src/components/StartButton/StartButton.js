@@ -12,7 +12,7 @@ class StartButton extends Component{
     return( 
       <Button
           variant="contained"
-          size="Large"
+          size="large"
           color="primary"
           aria-label="Add"
           className="start-button"
