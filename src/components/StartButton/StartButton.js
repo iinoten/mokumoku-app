@@ -8,6 +8,9 @@ import Button from '@material-ui/core/Button'
 /**マテリアルアイコン導入 */
 
 class StartButton extends Component{
+  constructor(props){
+    super(props)
+  }
   render(){
     return( 
       <Button
@@ -17,6 +20,7 @@ class StartButton extends Component{
           aria-label="Add"
           className="start-button"
           id="start-button"
+          onClick={this.props.onClick}
         >
           はじめる
         </Button>
