@@ -1,0 +1,16 @@
+.word-card{
+  width: 80%;
+  position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: 
+      translateY(-50%)
+      translateX(-50%);
+    /*webkitに対応*/
+      -webkit-transform: 
+        translateY(-50%)
+        translateX(-50%);
+      -ms-transform: 
+        translateY(-50%)
+        translateX(-50%);
+}
