@@ -13,7 +13,6 @@ class MokumokuPage extends Component{
       count_s: 0,
       count_min: 0,
       count_h: 0,
-      count_proceed: false,
       have_count: false,
 
       counting_now: false,
@@ -40,10 +39,14 @@ class MokumokuPage extends Component{
       }) 
     }
   }
+  count_down_cancelable = () => {
+    if(this.state.cancelable_count > 0){this.setState({ cancelable_count: this.state.cancelable_count -1 })}
+  }
   onClick_start_button_handler = () => {
     console.log("clicked start button!!!")
     this.setState({counting_now: !this.state.counting_now})
       this.mokumoku_timer = setInterval(this.count_up, 1000);
+      this.count_down_cancelable_interval = setInterval(this.count_down_cancelable, 1000);
   }
   reset_count = () => {
     this.setState({
@@ -51,9 +54,20 @@ class MokumokuPage extends Component{
       count_min:0,
       count_s:0,
     })
-    this.setState({counting_now: !this.state.counting_now})
   }
+  onClick_cancel_button_handler=()=>{
+    console.log("cancelerr ")
+    clearInterval(this.count_down_cancelable_interval)
+    clearInterval(this.mokumoku_timer)
+    this.setState({
+      count_h:0,
+      count_min:0,
+      count_s:0,
+      cancelable_count:10,
 
+      counting_now: !this.state.counting_now
+    })
+  }
   onClick_stop_button_handler = () => {
     console.log("clicked stop button!!!")
     clearInterval(this.mokumoku_timer);
@@ -68,7 +82,9 @@ class MokumokuPage extends Component{
         <Count />
         {this.state.counting_now? 
           <CancelButton 
-            onClick={this.onClick_stop_button_handler} />
+            cancelable_count={this.state.cancelable_count}
+            onClick_stop_button={this.onClick_stop_button_handler}
+            onCick_cancel_button={this.onClick_cancel_button_handler} />
           :
           <StartButton onClick={this.onClick_start_button_handler}/>
         }
