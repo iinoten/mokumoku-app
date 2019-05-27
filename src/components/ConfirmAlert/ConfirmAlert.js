@@ -20,6 +20,9 @@ class ConfirmAlert extends Component{
     console.log("close confirm popup")
     this.props.onClick_cancel()
   }
+  onClick_ok_button_handler = () => {
+    this.props.onClick_ok()
+  }
   render(){
     return(
     <Dialog
@@ -40,7 +43,7 @@ class ConfirmAlert extends Component{
         <Button onClick={this.onClose_handler} color="primary">
           つづける
         </Button>
-        <Button onClick={this.onClose_handler} color="primary">
+        <Button onClick={this.onClick_ok_button_handler} color="primary">
           おわる
         </Button>
       </DialogActions>
