@@ -4,6 +4,9 @@ import WordCard from '../../components/WordCard/WordCard'
 import StartButton from '../../components/StartButton/StartButton'
 import CancelButton from '../../components/CancelButton/CancelButton'
 
+import PopupReport from '../../components/PopupReport/PopupReport'
+import ConfirmAlert from '../../components/ConfirmAlert/ConfirmAlert'
+
 import Count from '../../container/Count'
 
 class MokumokuPage extends Component{
@@ -17,7 +20,10 @@ class MokumokuPage extends Component{
 
       counting_now: false,
 
-      cancelable_count: 10
+      cancelable_count: 10,
+
+      form_open: false,
+      confirm_open: false
     }
   }
 
@@ -72,7 +78,18 @@ class MokumokuPage extends Component{
     console.log("clicked stop button!!!")
     clearInterval(this.mokumoku_timer);
     this.setState({
-      counting_now: !this.state.counting_now
+      counting_now: !this.state.counting_now,
+      confirm_open: !this.state.confirm_open
+    })
+  }
+
+  onClick_confirm_canccel_button = () => {
+    this.setState({ confirm_open: !this.state.confirm_open })
+  }
+  onClick_confirm_ok_button=()=>{
+    this.setState({ 
+      confirm_open: !this.state.confirm_open,
+      form_open: !this.state.form_open
     })
   }
   render(){
@@ -80,6 +97,11 @@ class MokumokuPage extends Component{
       <div>
         <WordCard />
         <Count />
+        <PopupReport open={this.state.form_open}/>
+        <ConfirmAlert 
+          open={this.state.confirm_open}
+          onClick_ok={this.onClick_confirm_ok_button}
+          onClick_cancel={this.onClick_confirm_canccel_button}/>
         {this.state.counting_now? 
           <CancelButton 
             cancelable_count={this.state.cancelable_count}
