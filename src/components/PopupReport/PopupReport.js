@@ -16,19 +16,38 @@ class PopupReport extends Component{
     return(
       <div>
         <Dialog open={this.props.open}aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+        <DialogTitle id="form-dialog-title">2時間30分，おつかれさまでした</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here. We will send updates
-            occasionally.
+            もくもくの成果はどうでしたか？ フォームに記録しましょう!
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Email Address"
-            type="email"
+            label="もくもくした場所の名前"
+            helperText="例：スターバックス，コワーキングスペースの名前"
             fullWidth
+            autoComplete="off"
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="もくもくしたこと"
+            helperText="例：学校の課題を進めました! プログラミングの勉強をしました"
+            fullWidth
+            autoComplete="off"
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="もくもくした感想"
+            helperText="例：静かな場所で集中できました"
+            fullWidth
+            multiline
+            autoComplete="off"
           />
         </DialogContent>
         <DialogActions>
