@@ -9,7 +9,7 @@ import ConfirmAlert from '../../components/ConfirmAlert/ConfirmAlert'
 
 import Count from '../../container/Count'
 
-const sec_delay = 1000
+const sec_delay = 100
 
 class MokumokuPage extends Component{
   constructor(props){
@@ -33,7 +33,6 @@ class MokumokuPage extends Component{
     if(this.state.cancelable_count > 0){this.setState({ cancelable_count: this.state.cancelable_count-1})}
   }
   count_up = () => {
-    console.log("もくもくたいまー",this.state.count_h, this.state.count_min, this.state.count_s)
     this.setState({ count_s: this.state.count_s +1});
     if(this.state.count_s === 60) {
       this.setState({
@@ -51,20 +50,14 @@ class MokumokuPage extends Component{
     if(this.state.cancelable_count > 0){this.setState({ cancelable_count: this.state.cancelable_count -1 })}
   }
   onClick_start_button_handler = () => {
-    console.log("clicked start button!!!")
-    this.setState({counting_now: !this.state.counting_now})
+    this.setState({
+      counting_now: !this.state.counting_now,
+      cancelable_count: 10
+    })
       this.mokumoku_timer = setInterval(this.count_up, sec_delay);
       this.count_down_cancelable_interval = setInterval(this.count_down_cancelable, sec_delay);
   }
-  reset_count = () => {
-    this.setState({
-      count_h:0,
-      count_min:0,
-      count_s:0,
-    })
-  }
   onClick_cancel_button_handler=()=>{
-    console.log("cancelerr ")
     clearInterval(this.count_down_cancelable_interval)
     clearInterval(this.mokumoku_timer)
     this.setState({
@@ -78,28 +71,35 @@ class MokumokuPage extends Component{
   }
   onClick_stop_button_handler = () => {
     console.log("clicked stop button!!!")
-    clearInterval(this.mokumoku_timer);
     this.setState({
-      counting_now: !this.state.counting_now,
       confirm_open: !this.state.confirm_open
     })
   }
-
+  
   onClick_confirm_canccel_button = () => {
     this.setState({ confirm_open: !this.state.confirm_open })
   }
   onClick_confirm_ok_button=()=>{
+    clearInterval(this.mokumoku_timer);
     this.setState({ 
+      counting_now: !this.state.counting_now,
       confirm_open: !this.state.confirm_open,
-      form_open: !this.state.form_open
+      form_open: !this.state.form_open,
     })
+    console.log("confirm ok", this.state.cancelable_count)
+  }
+
+  onClick_mokumoku_form_submit = () => {
+    this.setState({ form_open:!this.state.form_open})
   }
   render(){
     return(
       <div>
         <WordCard />
         <Count />
-        <PopupReport open={this.state.form_open}/>
+        <PopupReport 
+          open={this.state.form_open}
+          onClick_submit={this.onClick_mokumoku_form_submit}/>
         <ConfirmAlert 
           open={this.state.confirm_open}
           onClick_ok={this.onClick_confirm_ok_button}
