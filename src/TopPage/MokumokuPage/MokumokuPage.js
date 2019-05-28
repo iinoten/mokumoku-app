@@ -22,10 +22,10 @@ class MokumokuPage extends Component{
 
       counting_now: false,
 
-      cancelable_count: 10,
+      cancelable_count: 10, //これ20秒とかにしたほうがいいかもしれん
 
       form_open: false,
-      confirm_open: false
+      confirm_open: false,
     }
   }
 
@@ -96,10 +96,11 @@ class MokumokuPage extends Component{
     return(
       <div>
         <WordCard />
-        <Count />
         <PopupReport 
           open={this.state.form_open}
-          onClick_submit={this.onClick_mokumoku_form_submit}/>
+          onClick_submit={this.onClick_mokumoku_form_submit}
+          mokumoku_h={this.state.count_h}
+          mokumoku_min={this.state.count_min}/>
         <ConfirmAlert 
           open={this.state.confirm_open}
           onClick_ok={this.onClick_confirm_ok_button}

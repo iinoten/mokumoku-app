@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Rating from 'material-ui-rating'
 
 import './PopupReport.css'
 
@@ -12,11 +13,14 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 
 class PopupReport extends Component{
+  onClick_submit_button = () => {
+    this.props.onClick_submit()
+  }
   render(){
     return(
       <div>
         <Dialog open={this.props.open}aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">2時間30分，おつかれさまでした</DialogTitle>
+        <DialogTitle id="form-dialog-title">{this.props.mokumoku_h}時間{this.props.mokumoku_min}分，おつかれさまでした</DialogTitle>
         <DialogContent>
           <DialogContentText>
             もくもくの成果はどうでしたか？ フォームに記録しましょう!
@@ -49,8 +53,17 @@ class PopupReport extends Component{
             multiline
             autoComplete="off"
           />
+          場所の評価
+          <Rating
+          value={3}
+          max={5}
+          onChange={(value) => console.log(`Rated with value ${value}`)}
+        />
         </DialogContent>
         <DialogActions>
+          <Button color="primary" onClick={this.onClick_submit_button}>
+            完了!
+          </Button>
         </DialogActions>
       </Dialog>
       </div>
