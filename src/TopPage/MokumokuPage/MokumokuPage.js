@@ -9,6 +9,8 @@ import ConfirmAlert from '../../components/ConfirmAlert/ConfirmAlert'
 
 import Count from '../../container/Count'
 
+const sec_delay = 1000
+
 class MokumokuPage extends Component{
   constructor(props){
     super(props);
@@ -51,8 +53,8 @@ class MokumokuPage extends Component{
   onClick_start_button_handler = () => {
     console.log("clicked start button!!!")
     this.setState({counting_now: !this.state.counting_now})
-      this.mokumoku_timer = setInterval(this.count_up, 1000);
-      this.count_down_cancelable_interval = setInterval(this.count_down_cancelable, 1000);
+      this.mokumoku_timer = setInterval(this.count_up, sec_delay);
+      this.count_down_cancelable_interval = setInterval(this.count_down_cancelable, sec_delay);
   }
   reset_count = () => {
     this.setState({
