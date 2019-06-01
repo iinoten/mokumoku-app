@@ -1,0 +1,8 @@
+.map{
+  height: calc(100vh - 56px);
+  width: 100vw;
+}
+#popup{
+  position: absolute;
+  bottom: 60px
+}
