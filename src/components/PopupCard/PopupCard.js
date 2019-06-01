@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -21,8 +22,15 @@ class PopupCard extends Component{
       copied: false
     }
   }
+  onOutsideClick_handler = () => {
+    console.log("clicked outside!")
+    if ('ontouchstart' in document.documentElement) {
+      document.body.style.cursor = 'pointer';
+    }
+  }
   render(){
     return(
+      <OutsideClickHandler onOutsideClick={this.onOutsideClick_handler}>
       <Card id="popup-card">
         <CardContent>
           <Typography variant="h5" component="h2">
@@ -41,14 +49,15 @@ class PopupCard extends Component{
           </div>
         </CardContent>
         <CardActions>
-          <Button size="medium">詳細を見る</Button>
+          <Button size="medium" onClick={console.log("clicked outside!")}>詳細を見る</Button>
           <CopyToClipboard
             text={this.props.address}
             onCopy={() => this.setState({copied: true})}>
-            <Button size="medium">住所をコピペする</Button>
+            <Button size="medium">住所をコピーする</Button>
           </CopyToClipboard>
         </CardActions>
       </Card>
+      </OutsideClickHandler>
     );
   }
 }
