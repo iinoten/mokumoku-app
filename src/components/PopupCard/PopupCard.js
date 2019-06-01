@@ -8,6 +8,12 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import LocationOnOutlined from '@material-ui/icons/LocationOnOutlined'
 import AvTimer from '@material-ui/icons/Timer'
 
@@ -19,18 +25,26 @@ class PopupCard extends Component{
   constructor(){
     super();
     this.state={
-      copied: false
+      copied: false,
+      report_dialog: false
     }
   }
-  onOutsideClick_handler = () => {
-    console.log("clicked outside!")
-    if ('ontouchstart' in document.documentElement) {
-      document.body.style.cursor = 'pointer';
-    }
+  onClick_copy_button = () => {
+    this.setState({copied: true, report_dialog: true})
+    setTimeout(()=>this.setState({report_dialog: false}), 1000)
   }
   render(){
     return(
       <OutsideClickHandler onOutsideClick={this.onOutsideClick_handler}>
+      <Dialog
+        open={this.state.report_dialog}
+      >
+        <DialogContent>
+          <DialogContentText>
+            コピーしました
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
       <Card id="popup-card">
         <CardContent>
           <Typography variant="h5" component="h2">
@@ -49,12 +63,13 @@ class PopupCard extends Component{
           </div>
         </CardContent>
         <CardActions>
-          <Button size="medium" onClick={console.log("clicked outside!")}>詳細を見る</Button>
+          <Button size="medium" onClick={console.log()}>詳細を見る</Button>
           <CopyToClipboard
             text={this.props.address}
-            onCopy={() => this.setState({copied: true})}>
+            onCopy={this.onClick_copy_button}>
             <Button size="medium">住所をコピーする</Button>
           </CopyToClipboard>
+          <Button size="medium">閉じる</Button>
         </CardActions>
       </Card>
       </OutsideClickHandler>
