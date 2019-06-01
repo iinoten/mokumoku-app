@@ -1,0 +1,8 @@
+#popup-card {
+  position: fixed;
+  bottom: 57px;
+  width: 95%; 
+  left: 50%;
+  transform: 
+      translateX(-50%);
+}
