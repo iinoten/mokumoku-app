@@ -31,15 +31,15 @@ const InnerMap = withGoogleMap(( props ) => {
   )
 });
 
-const Map = ({lat, lng, spaces, onClick_marker_handler} ) => {
-  console.log(spaces)
+const Map = (props) => {
+  console.log(props.spaces)
   return(
     <InnerMap
-      onClick_marker_handler={onClick_marker_handler}
-      spaces={spaces}
+      onClick_marker_handler={props.onClick_marker_handler}
+      spaces={props.spaces}
       containerElement={<div />}
       mapElement={<div className="map" />}
-      marker={{ position: { lat: lat, lng: lng } }}
+      marker={{ position: { lat: props.lat, lng: props.lng } }}
     />
   )
 };
