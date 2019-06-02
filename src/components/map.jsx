@@ -1,8 +1,5 @@
 import React from "react";
-import PropTypes from 'prop-types';
 import { withGoogleMap, GoogleMap, Marker } from "react-google-maps";
-
-import FiberManualRecordRounded from '@material-ui/icons/FiberManualRecordRounded'
 
 
 import './map.css'
