@@ -20,7 +20,7 @@ const InnerMap = withGoogleMap(( props ) => {
         props.spaces.map( (item, index) =>
           <Marker 
             id={index}
-            onClick={props.onClick_marker_handler}
+            onClick={()=>props.onClick_marker_handler(index)}
             position={{lat: item.lat, lng: item.lng}} icon={`${process.env.PUBLIC_URL}/picture/red_cloud.png`} />
         )
       }9
