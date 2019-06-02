@@ -9,6 +9,7 @@ const InnerMap = withGoogleMap(( props ) => {
   console.log("here!!!!!!!!!!1",props.spaces)
   return(
     <GoogleMap
+    id="map"
       defaultZoom={20}
       defaultCenter={{lat: props.marker.position.lat, lng: props.marker.position.lng}}
       center={{lat: props.marker.position.lat, lng: props.marker.position.lng}}
