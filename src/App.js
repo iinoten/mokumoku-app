@@ -40,8 +40,8 @@ class App extends Component{
           <Switch>
             <Route exact path='/account' render={()=> <AccountPage />} />
             <Route path='/mokumoku' render={()=> <MokumokuPage />} />
-            <Route path='/serch' render={()=> <SerchPage />} />
-          <Redirect from='/' to='mokumoku' />
+            <Route path='/search' render={()=> <SerchPage />} />
+            <Redirect from='/' to='mokumoku' />
           </Switch>
           <BottomBar />
         </div>
