@@ -22,10 +22,10 @@ import StarRatingComponent from 'react-star-rating-component';
 import './PopupCard.css'
 
 class PopupCard extends Component{
-  constructor(){
+  constructor(props){
     super();
+    console.log(props.open_flag)
     this.state={
-      popup_open: true,
       copied: false,
       report_dialog: false
     }
@@ -35,9 +35,13 @@ class PopupCard extends Component{
     setTimeout(()=>this.setState({report_dialog: false}), 1000)
   }
   onClick_close_button_handler = () => {
-    this.setState({popup_open: false})
+    this.props.close_handler()
+  }
+  componentDidMount(){
+    this.setState({popup_open: this.props.open_flag})
   }
   render(){
+    console.log(this.state.popup_open)
     return(
       <div>
       <Dialog
@@ -49,7 +53,7 @@ class PopupCard extends Component{
           </DialogContentText>
         </DialogContent>
       </Dialog>
-      <Card id="popup-card" style={{display: this.state.popup_open ? '' : 'none'}}>
+      <Card id="popup-card" style={{display: this.props.open_flag ? '' : 'none'}}>
         <CardContent>
           <Typography variant="h5" component="h2">
             {this.props.title}
