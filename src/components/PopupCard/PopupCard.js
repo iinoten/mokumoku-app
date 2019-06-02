@@ -25,6 +25,7 @@ class PopupCard extends Component{
   constructor(){
     super();
     this.state={
+      popup_open: true,
       copied: false,
       report_dialog: false
     }
@@ -33,9 +34,12 @@ class PopupCard extends Component{
     this.setState({copied: true, report_dialog: true})
     setTimeout(()=>this.setState({report_dialog: false}), 1000)
   }
+  onClick_close_button_handler = () => {
+    this.setState({popup_open: false})
+  }
   render(){
     return(
-      <OutsideClickHandler onOutsideClick={this.onOutsideClick_handler}>
+      <div>
       <Dialog
         open={this.state.report_dialog}
       >
@@ -45,7 +49,7 @@ class PopupCard extends Component{
           </DialogContentText>
         </DialogContent>
       </Dialog>
-      <Card id="popup-card">
+      <Card id="popup-card" style={{display: this.state.popup_open ? '' : 'none'}}>
         <CardContent>
           <Typography variant="h5" component="h2">
             {this.props.title}
@@ -69,10 +73,10 @@ class PopupCard extends Component{
             onCopy={this.onClick_copy_button}>
             <Button size="medium">住所をコピーする</Button>
           </CopyToClipboard>
-          <Button size="medium">閉じる</Button>
+          <Button size="medium" onClick={this.onClick_close_button_handler}>閉じる</Button>
         </CardActions>
       </Card>
-      </OutsideClickHandler>
+      </div>
     );
   }
 }

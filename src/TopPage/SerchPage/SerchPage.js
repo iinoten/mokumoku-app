@@ -15,10 +15,13 @@ class SerchPage extends Component{
       mokumoku_place: [{lat: 35.6847829, lng: 139.6970829, place_name: 'ギークハウス新宿', star_value: 3.5}]
     }
   }
+  onClick_marker_handler = (title, address, rating, ave_time) => {
+    console.log(title, address, rating, ave_time)
+  }
   render(){
     return(
       <div>
-        <Map spaces={this.state.mokumoku_place} id="map" lat={this.state.lat} lng={this.state.lng} />
+        <Map onClick_marker_handler={this.onClick_marker_handler} spaces={this.state.mokumoku_place} id="map" lat={this.state.lat} lng={this.state.lng} />
         <PopupCard title={"ギークハウス新宿1"} ave_time={3.5} rating={4} address={"〒160-0022 東京都新宿区新宿２丁目１４−１０"}/>
       </div>
     );
