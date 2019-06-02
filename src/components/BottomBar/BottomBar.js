@@ -37,7 +37,7 @@ class BottomBar extends Component{
     this.props.history.push('/mokumoku');
   }
   onClick_Serch_nav=()=>{
-    this.props.history.push('/serch');
+    this.props.history.push('/search');
   }
   render(){
     const actionClasses = this.props.classes;
