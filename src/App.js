@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
+import { BrowserRouter, Route, Link } from 'react-router-dom'
+
 import './App.css';
 
 import MokumokuPage from './TopPage/MokumokuPage/MokumokuPage'
 import SerchPage from './TopPage/SerchPage/SerchPage'
+import AccountPage from './TopPage/AccountPage/AccountPage'
 
 import BottomBar from './components/BottomBar/BottomBar'
 
@@ -32,10 +35,14 @@ class App extends Component{
   }
   render(){
     return(
+      <BrowserRouter>
       <div className="App">
-        <SerchPage />
+        <Route exact path='/' render={()=> <AccountPage />} />
+        <Route path='/mokumoku' render={()=> <MokumokuPage />} />
+        <Route path='/serch' render={()=> <SerchPage />} />
         <BottomBar />
       </div>
+      </BrowserRouter>
     );
   }
 }
