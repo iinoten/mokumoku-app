@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import { withRouter } from 'react-router';
+
 import './BottomBar.css'
 
 /*マテリアルUI導入*/
@@ -28,6 +30,15 @@ class BottomBar extends Component{
   handleChange = (event, value) => {
     this.setState({ value });
   };
+  onClick_Account_nav=()=>{
+    this.props.history.push('/account');
+  }
+  onClick_Mokumoku_nav=()=>{
+    this.props.history.push('/mokumoku');
+  }
+  onClick_Serch_nav=()=>{
+    this.props.history.push('/serch');
+  }
   render(){
     const actionClasses = this.props.classes;
     return(
@@ -36,22 +47,25 @@ class BottomBar extends Component{
             classes={actionClasses}
             label="Account"
             icon={<FaceRounded/>}
+            onClick={this.onClick_Account_nav}
           />
 
           <BottomNavigationAction
             classes={actionClasses}
             label="Mokumoku"
             icon={<ComputerOutlined/>}
+            onClick={this.onClick_Mokumoku_nav}
           />
 
           <BottomNavigationAction
             classes={actionClasses}
             label="Serch"
             icon={<PlaceOutlined />}
+            onClick={this.onClick_Serch_nav}
           />
         </BottomNavigation>
     );
   }
 }
 
-export default withStyles(styles)(BottomBar);
+export default withRouter(withStyles(styles)(BottomBar));

@@ -23,7 +23,7 @@ const InnerMap = withGoogleMap(( props ) => {
             onClick={()=>props.onClick_marker_handler(index)}
             position={{lat: item.lat, lng: item.lng}} icon={`${process.env.PUBLIC_URL}/picture/red_cloud.png`} />
         )
-      }9
+      }
     </GoogleMap>
   )
 });

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { BrowserRouter, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
 
 import './App.css';
 
@@ -36,12 +36,15 @@ class App extends Component{
   render(){
     return(
       <BrowserRouter>
-      <div className="App">
-        <Route exact path='/' render={()=> <AccountPage />} />
-        <Route path='/mokumoku' render={()=> <MokumokuPage />} />
-        <Route path='/serch' render={()=> <SerchPage />} />
-        <BottomBar />
-      </div>
+        <div className='App'>
+          <Switch>
+            <Route exact path='/account' render={()=> <AccountPage />} />
+            <Route path='/mokumoku' render={()=> <MokumokuPage />} />
+            <Route path='/serch' render={()=> <SerchPage />} />
+          <Redirect from='/' to='mokumoku' />
+          </Switch>
+          <BottomBar />
+        </div>
       </BrowserRouter>
     );
   }
