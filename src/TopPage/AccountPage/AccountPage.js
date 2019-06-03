@@ -29,6 +29,12 @@ class AccountPage extends Component{
     firebase.auth().signOut()
   }
 
+  componentWillMount(){
+    firebase.auth().onAuthStateChanged((user) => {
+      console.log(user.uid)
+    });
+  }
+
   render(){
       if (this.state.loading) return <div>loading</div>;
     return (

@@ -6,7 +6,7 @@ import firebaseui from 'firebaseui'
 
 const uiConfig = {
     signInFlow: 'popup',
-    signInSuccessUrl: "/",
+    signInSuccessUrl: "/account",
     signInOptions: [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
         firebase.auth.TwitterAuthProvider.PROVIDER_ID,
@@ -15,7 +15,6 @@ const uiConfig = {
         firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
     ],
 }
-
 
 const SignInScreen = (props) => {
     return (
