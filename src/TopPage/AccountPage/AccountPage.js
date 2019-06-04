@@ -15,28 +15,54 @@ class AccountPage extends Component{
   }
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
-      this.setState({
-        loading: false,
-        user: user
+      console.log("hello",user)
+      if(user){
+        firebase.firestore().collection('users').doc(user.uid).get()
+          .then((doc)=>{
+            console.log(Boolean(doc.data()));
+            if(!doc.data()){
+              firebase.firestore().collection('users').doc(user.uid).set({
+                name: user.displayName,
+                total_mokumoku_time: 0,
+                mokumoku_history: [],
+                profile: {
+                  self_profile: '',
+                  sns_ID: {
+                    twitter: '',
+                    github: '',
+                    facebook: ''
+                  }
+                }
+              })
+            }
+          })
+          .catch((err)=>{
+            console("get Error:", err)
+          })
+        }
       });
-    });
+              this.setState({
+                loading: false,
+                //user: user.uid
+              });
   }
-  login() {
-    const provider = new firebase.auth.GoogleAuthProvider()
-    firebase.auth().signInWithRedirect(provider)
-  }
-  logout(){
+  logout = () => {
     firebase.auth().signOut()
+    this.setState({user: null})
+    console.log("logout")
   }
 
   componentWillMount(){
     firebase.auth().onAuthStateChanged((user) => {
-      console.log(user.uid)
+      console.log("state change ",user)
+      this.setState({
+        user: user.uid
+      })
     });
   }
 
   render(){
-      if (this.state.loading) return <div>loading</div>;
+      if (this.state.loading)return <div>loading</div>;
     return (
       <div>
         Username: {this.state.user && this.state.user.displayName}
