@@ -47,8 +47,7 @@ class AccountPage extends Component{
               });
   }
   logout = () => {
-    firebase.auth().signOut()
-    this.setState({user: null})
+    firebase.auth().signOut().then(this.setState({user: null}))
     console.log("logout")
   }
 
