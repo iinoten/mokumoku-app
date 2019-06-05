@@ -13,8 +13,30 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 
 class PopupReport extends Component{
+  constructor(props){
+    super();
+    this.state={
+      rating: props.rating,
+      form_place_name: '',
+      form_do_phrase: '',
+      form_impression: '',
+    }
+  }
   onClick_submit_button = () => {
     this.props.onClick_submit()
+  }
+  onClick_star_rating = (rating) => {
+    console.log(rating)
+    this.setState({ rating })
+  }
+  onChange_place_name_form = (e) => {
+    this.setState({form_place_name: e.target.value})
+  }
+  onChange_do_phrase_form = (e) => {
+    this.setState({form_do_phrase: e.target.value})
+  }
+  onChange_form_impression = (e) => {
+    this.setState({ form_impression: e.target.value})
   }
   render(){
     return(
@@ -26,6 +48,8 @@ class PopupReport extends Component{
             もくもくの成果はどうでしたか？ フォームに記録しましょう!
           </DialogContentText>
           <TextField
+            value={this.state.form_place_name}
+            onChange={e=>this.onChange_place_name_form(e)}
             autoFocus
             margin="dense"
             id="name"
@@ -35,6 +59,8 @@ class PopupReport extends Component{
             autoComplete="off"
           />
           <TextField
+            value={this.state.form_do_phrase}
+            onChange={e=>this.onChange_do_phrase_form(e)}
             autoFocus
             margin="dense"
             id="name"
@@ -44,6 +70,8 @@ class PopupReport extends Component{
             autoComplete="off"
           />
           <TextField
+            value={this.state.form_impression}
+            onChange={e=>this.onChange_form_impression(e)}
             autoFocus
             margin="dense"
             id="name"
@@ -55,9 +83,9 @@ class PopupReport extends Component{
           />
           場所の評価
           <Rating
-          value={3}
+          value={this.state.rating}
           max={5}
-          onChange={(value) => console.log(`Rated with value ${value}`)}
+          onChange={(value) => this.onClick_star_rating(value)}
         />
         </DialogContent>
         <DialogActions>

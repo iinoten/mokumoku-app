@@ -27,7 +27,8 @@ class PopupCard extends Component{
     console.log(props.open_flag)
     this.state={
       copied: false,
-      report_dialog: false
+      report_dialog: false,
+      star_rating: props.rating
     }
   }
   onClick_copy_button = () => {
@@ -39,6 +40,12 @@ class PopupCard extends Component{
   }
   componentDidMount(){
     this.setState({popup_open: this.props.open_flag})
+  }
+  changeRating( newRating, name ) {
+    console.log(newRating)
+    this.setState({
+      rating: newRating
+    });
   }
   render(){
     console.log(this.state.popup_open)
@@ -61,6 +68,7 @@ class PopupCard extends Component{
           <div><StarRatingComponent
               name="評価"
               value={this.props.rating}
+              changeRating={(e)=>this.changeRating}
             /></div>
           <AvTimer color="action"/>みんなの平均もくもく時間：{this.props.ave_time}時間
           <div>

@@ -100,7 +100,8 @@ class MokumokuPage extends Component{
           open={this.state.form_open}
           onClick_submit={this.onClick_mokumoku_form_submit}
           mokumoku_h={this.state.count_h}
-          mokumoku_min={this.state.count_min}/>
+          mokumoku_min={this.state.count_min}
+          rating={3}/>
         <ConfirmAlert 
           open={this.state.confirm_open}
           onClick_ok={this.onClick_confirm_ok_button}
