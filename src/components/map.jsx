@@ -18,11 +18,15 @@ const InnerMap = withGoogleMap(( props ) => {
         position={{ lat: props.marker.position.lat, lng: props.marker.position.lng }}
       />
       {
-        props.spaces.map( (item, index) =>
+        props.spaces.map( (item, index) => {
+          console.log(item)
+          return(
           <Marker 
             id={index}
             onClick={()=>props.onClick_marker_handler(index)}
-            position={{lat: item.lat, lng: item.lng}} icon={`${process.env.PUBLIC_URL}/picture/red_cloud.png`} />
+            position={{lat: item.data.position.lat, lng: item.data.position.lng}} 
+            icon={`${process.env.PUBLIC_URL}/picture/red_cloud.png`} />
+          )}
         )
       }
     </GoogleMap>
