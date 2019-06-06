@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import firebase from 'firebase'
+import axios from 'axios'
 
 import WordCard from '../../components/WordCard/WordCard'
 import StartButton from '../../components/StartButton/StartButton'
@@ -11,6 +12,8 @@ import ConfirmAlert from '../../components/ConfirmAlert/ConfirmAlert'
 import Count from '../../container/Count'
 
 const sec_delay = 1
+
+var perfect_address;
 
 class MokumokuPage extends Component{
   constructor(props){
@@ -28,7 +31,8 @@ class MokumokuPage extends Component{
       form_open: false,
       confirm_open: false,
 
-      uid: props.uid
+      uid: props.uid,
+      now_address: ''
     }
   }
 
@@ -53,29 +57,34 @@ class MokumokuPage extends Component{
     if(this.state.cancelable_count > 0){this.setState({ cancelable_count: this.state.cancelable_count -1 })}
   }
   onClick_start_button_handler = () => {
-    let uid;
-    firebase.auth().onAuthStateChanged((user) => {
-      if(user){
-        this.setState({uid: user.uid})
-        uid = user.uid;
-        console.log(uid)
-      }
-    })
-    if(this.state.uid){
-      this.setState({
-        counting_now: !this.state.counting_now,
-        cancelable_count: 10
+    if(navigator.geolocation){
+      let uid;
+      firebase.auth().onAuthStateChanged((user) => {
+        if(user){
+          this.setState({uid: user.uid})
+          uid = user.uid;
+          console.log(uid)
+        }
       })
-        this.mokumoku_timer = setInterval(this.count_up, sec_delay);
-        this.count_down_cancelable_interval = setInterval(this.count_down_cancelable, sec_delay);
+      if(this.state.uid){
+        this.setState({
+          counting_now: !this.state.counting_now,
+          cancelable_count: 10
+        })
+          this.mokumoku_timer = setInterval(this.count_up, sec_delay);
+          this.count_down_cancelable_interval = setInterval(this.count_down_cancelable, sec_delay);
+      } else {
+        alert("先にaccountページでログインの確認をしてください")
+      }
     } else {
-      alert("先にaccountページでログインの確認をしてください")
+      alert('システム設定から，位置情報取得の許可をしてください')
     }
   }
   onClick_cancel_button_handler=()=>{
     clearInterval(this.count_down_cancelable_interval)
     clearInterval(this.mokumoku_timer)
     this.setState({
+      now_position: null,
       count_h:0,
       count_min:0,
       count_s:0,
@@ -104,9 +113,28 @@ class MokumokuPage extends Component{
     console.log("confirm ok", this.state.cancelable_count)
   }
 
-  onClick_mokumoku_form_submit = (done,  time_h, time_min, place_id, rating, impression,) => {
+  onClick_mokumoku_form_submit = (done,  time_h, time_min, place_id, rating, impression, place_name) => {
+    let time = new Date();
+    
+    var temp_now_address;
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.setState({now_position: {lat: position.coords.latitude, lng: position.coords.longitude}})
+      axios.get('https://maps.googleapis.com/maps/api/geocode/json?key=' + process.env.REACT_APP_GOOGLE_MAPS_API + '&latlng=' + position.coords.latitude + ',' + position.coords.longitude + '&sensor=false')
+          .then((res)=>{
+            let address_name = res.data.results
+            this.setState({now_address: address_name[0].formatted_address})
+            temp_now_address = address_name[0].formatted_address;
+            perfect_address = address_name[0].formatted_address
+            console.log(address_name[0].formatted_address)
+          })
+          .catch((err) => {
+            console.log("Error:",err)
+          })
+    })
+    console.log(temp_now_address)
+    
     this.setState({ form_open:!this.state.form_open})
-    console.log("clickerdd")
+    console.log("clickerdd", this.state.now_address)
     if(this.state.uid){
     firebase.firestore().collection('users').doc(this.state.uid).get()
       .then((doc) => {
@@ -131,6 +159,55 @@ class MokumokuPage extends Component{
         console.log("Get Error", err)
       })
     }
+    firebase.firestore().collection('mokumoku_space').doc(place_id).get()
+      .then((doc)=>{
+        console.log(perfect_address)
+        if(!doc.data()){
+          firebase.firestore().collection('mokumoku_space').doc(place_id).set({
+            position: {lat: 100, lng: 100},
+            impressions: [{
+              comment: impression,
+              date: time.getFullYear() + '/' + (time.getMonth()+1) + '/' + time.getDate(),
+              rating,
+              user_id: this.state.uid,
+              time: (time_h + Math.round(time_min/6)),
+            }],
+            address: perfect_address,
+            name: place_name
+          })
+          .then(console.log("save place data"))
+        }
+      })
+      .catch((err)=>console.log(err))
+  }
+  componentDidMount(){
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.setState({now_position: {lat: position.coords.latitude, lng: position.coords.longitude}})
+      axios.get('https://maps.googleapis.com/maps/api/geocode/json?key=' + process.env.REACT_APP_GOOGLE_MAPS_API + '&latlng=' + position.coords.latitude + ',' + position.coords.longitude + '&sensor=false')
+          .then((res)=>{
+            let address_name = res.data.results
+            this.setState({now_address: address_name[0].formatted_address})
+            console.log(address_name[0].formatted_address)
+          })
+          .catch((err) => {
+            console.log("Error:",err)
+          })
+    })
+    navigator.geolocation.watchPosition(
+      (position) => {
+        this.setState({now_position: {lat: position.coords.latitude, lng: position.coords.longitude}})
+        axios.get('https://maps.googleapis.com/maps/api/geocode/json?key=' + process.env.REACT_APP_GOOGLE_MAPS_API + '&latlng=' + position.coords.latitude + ',' + position.coords.longitude + '&sensor=false')
+          .then((res)=>{
+            let address_name = res.data.results
+            this.setState({now_address: address_name[0].formatted_address})
+            perfect_address = address_name[0].formatted_address;
+            console.log(address_name[0].formatted_address)
+          })
+          .catch((err) => {
+            console.log("Error:",err)
+          })
+      }
+    )
   }
   render(){
     return(
