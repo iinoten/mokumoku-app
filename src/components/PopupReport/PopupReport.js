@@ -23,13 +23,15 @@ class PopupReport extends Component{
     }
   }
   onClick_submit_button = () => {
+    let place_unique_id = this.get_Unique_Str()
     this.props.onClick_submit(
-      this.state.form_place_name, //場所の名前
+      //this.state.form_place_name, //場所の名前
       this.state.form_do_phrase,  //なにをもくもくしたか
-      this.state.form_impression, //場所の感想
-      this.state.rating,          //星評価いくつか
       this.props.mokumoku_h,      //何時間もくもくしたか
-      this.props.mokumoku_min     //何分もくもくしたか
+      this.props.mokumoku_min,    //何分もくもくしたか
+      place_unique_id,
+      this.state.rating,
+      this.state.form_impression, //場所の感想
     )
   }
   onClick_star_rating = (rating) => {

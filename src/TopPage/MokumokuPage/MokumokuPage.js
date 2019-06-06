@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import firebase from 'firebase'
 
 import WordCard from '../../components/WordCard/WordCard'
 import StartButton from '../../components/StartButton/StartButton'
@@ -89,8 +90,33 @@ class MokumokuPage extends Component{
     console.log("confirm ok", this.state.cancelable_count)
   }
 
-  onClick_mokumoku_form_submit = () => {
+  onClick_mokumoku_form_submit = (done,  time_h, time_min, place_id, rating, impression,) => {
     this.setState({ form_open:!this.state.form_open})
+    console.log("clickerdd")
+    if(this.props.uid){
+    firebase.firestore().collection('users').doc(this.props.uid).get()
+      .then((doc) => {
+        console.log("Get new data!!!",doc.data())
+        let temp_user_data = doc.data();
+        temp_user_data.mokumoku_history.unshift({
+          place_id,
+          time: {
+            h: time_h,
+            min: time_min
+          },
+          done,
+          rating,
+          impression
+        })
+        console.log(temp_user_data)
+        firebase.firestore().collection('users').doc(this.props.uid).set(temp_user_data)
+          .then(()=>console.log("success save user data"))
+          .catch((err)=>console.log('Error save user data', err))
+      })
+      .catch((err) => {
+        console.log("Get Error", err)
+      })
+    }
   }
   render(){
     return(
