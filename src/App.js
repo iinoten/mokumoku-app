@@ -18,6 +18,7 @@ class App extends Component{
     this.state = {
       lat: 35.693825,
       lng: 139.703356,
+      uid: ''
     }
     firebase.initializeApp({
       apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -26,6 +27,10 @@ class App extends Component{
     })
     firebase.firestore().collection('test').doc('test').get()
       .then((doc)=>{})
+  }
+  update_uid = (uid) => {
+    this.setState({ uid })
+    console.log(uid)
   }
   change_coordinate = (lat, lng) =>{
     this.setState({
@@ -38,8 +43,8 @@ class App extends Component{
       <BrowserRouter>
         <div className='App'>
           <Switch>
-            <Route exact path='/account' render={()=> <AccountPage />} />
-            <Route path='/mokumoku' render={()=> <MokumokuPage />} />
+            <Route exact path='/account' render={()=> <AccountPage test={"正解!!"} update_uid={this.update_uid} />} />
+            <Route path='/mokumoku' render={()=> <MokumokuPage uid={this.state.uid} />} />
             <Route path='/search' render={()=> <SerchPage />} />
             <Redirect from='/' to='mokumoku' />
           </Switch>
