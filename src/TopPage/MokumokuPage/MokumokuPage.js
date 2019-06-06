@@ -61,7 +61,7 @@ class MokumokuPage extends Component{
         console.log(uid)
       }
     })
-    if(uid){
+    if(this.state.uid){
       this.setState({
         counting_now: !this.state.counting_now,
         cancelable_count: 10
