@@ -36,7 +36,6 @@ class PopupReport extends Component{
 
   }
   onClick_star_rating = (rating) => {
-    console.log(rating)
     this.setState({ rating })
   }
   onChange_place_name_form = (e) => {

@@ -32,7 +32,6 @@ class App extends Component{
     if(!this.state.uid){
       alert('ログイン認証しました')
       this.setState({ uid })
-      console.log(uid)
     }
   }
   change_coordinate = (lat, lng) =>{

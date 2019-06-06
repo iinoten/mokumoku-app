@@ -9,8 +9,6 @@ import CancelButton from '../../components/CancelButton/CancelButton'
 import PopupReport from '../../components/PopupReport/PopupReport'
 import ConfirmAlert from '../../components/ConfirmAlert/ConfirmAlert'
 
-import Count from '../../container/Count'
-
 const sec_delay = 1
 
 var perfect_address;
@@ -95,7 +93,6 @@ class MokumokuPage extends Component{
     })
   }
   onClick_stop_button_handler = () => {
-    console.log("clicked stop button!!!")
     this.setState({
       confirm_open: !this.state.confirm_open
     })
@@ -111,7 +108,6 @@ class MokumokuPage extends Component{
       confirm_open: !this.state.confirm_open,
       form_open: !this.state.form_open,
     })
-    console.log("confirm ok", this.state.cancelable_count)
   }
 
   onClick_mokumoku_form_submit = (done,  time_h, time_min, place_id, rating, impression, place_name) => {
@@ -126,20 +122,16 @@ class MokumokuPage extends Component{
             this.setState({now_address: address_name[0].formatted_address})
             temp_now_address = address_name[0].formatted_address;
             perfect_address = address_name[0].formatted_address
-            console.log(address_name[0].formatted_address)
           })
           .catch((err) => {
             console.log("Error:",err)
           })
     })
-    console.log(temp_now_address)
     
     this.setState({ form_open:!this.state.form_open})
-    console.log("clickerdd", this.state.now_address)
     if(this.state.uid){
     firebase.firestore().collection('users').doc(this.state.uid).get()
       .then((doc) => {
-        console.log("Get new data!!!",doc.data())
         let temp_user_data = doc.data();
         temp_user_data.mokumoku_history.unshift({
           place_id,
@@ -151,7 +143,6 @@ class MokumokuPage extends Component{
           rating,
           impression
         })
-        console.log(temp_user_data)
         firebase.firestore().collection('users').doc(this.state.uid).set(temp_user_data)
           .then(()=>console.log("success save user data"))
           .catch((err)=>console.log('Error save user data', err))
@@ -162,7 +153,6 @@ class MokumokuPage extends Component{
     }
     firebase.firestore().collection('mokumoku_space').doc(place_id).get()
       .then((doc)=>{
-        console.log(perfect_address)
         if(!doc.data()){
           firebase.firestore().collection('mokumoku_space').doc(place_id).set({
             position: {lat: this.state.now_position.lat, lng: this.state.now_position.lng},
@@ -188,7 +178,6 @@ class MokumokuPage extends Component{
           .then((res)=>{
             let address_name = res.data.results
             this.setState({now_address: address_name[0].formatted_address})
-            console.log(address_name[0].formatted_address)
           })
           .catch((err) => {
             console.log("Error:",err)
@@ -202,7 +191,6 @@ class MokumokuPage extends Component{
             let address_name = res.data.results
             this.setState({now_address: address_name[0].formatted_address})
             perfect_address = address_name[0].formatted_address;
-            console.log(address_name[0].formatted_address)
           })
           .catch((err) => {
             console.log("Error:",err)

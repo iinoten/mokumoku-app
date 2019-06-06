@@ -35,13 +35,11 @@ class SerchPage extends Component{
           })
           console.log(doc.id)
         })
-        console.log("test",place_data)
         this.setState({mokumoku_place: place_data})
       })
       .catch((err)=>console.log(err))
   }
   onClick_marker_handler = (index) => {
-    console.log("clicked marker", this.state.mokumoku_place[index])
     let place_data = this.state.mokumoku_place[index];
         let sum = function(arr, fn) { //合計値割り出し
           if (fn) {
@@ -65,7 +63,6 @@ class SerchPage extends Component{
         all_rating.push(item.rating)
       )
     let ave_rating = average(all_rating)
-    console.log(ave_rating)
     let ave_time = average(all_time)
     this.setState({
       popup_open_flag: true,
@@ -79,10 +76,8 @@ class SerchPage extends Component{
   }
   onClick_pop_close_button_handler = () => {
     this.setState({popup_open_flag: false})
-    console.log("close")
   }
   render(){
-    console.log(this.state.mokumoku_place)
     return(
       <div>
         <Map 
