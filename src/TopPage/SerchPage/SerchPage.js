@@ -82,7 +82,7 @@ class SerchPage extends Component{
     console.log("close")
   }
   render(){
-    console.log(this.state.popup_open_flag)
+    console.log(this.state.mokumoku_place)
     return(
       <div>
         <Map 

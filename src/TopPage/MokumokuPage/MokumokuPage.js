@@ -32,7 +32,8 @@ class MokumokuPage extends Component{
       confirm_open: false,
 
       uid: props.uid,
-      now_address: ''
+      now_address: '',
+      now_position: {lat: null, lng: null}
     }
   }
 
@@ -164,7 +165,7 @@ class MokumokuPage extends Component{
         console.log(perfect_address)
         if(!doc.data()){
           firebase.firestore().collection('mokumoku_space').doc(place_id).set({
-            position: {lat: 100, lng: 100},
+            position: {lat: this.state.now_position.lat, lng: this.state.now_position.lng},
             impressions: [{
               comment: impression,
               date: time.getFullYear() + '/' + (time.getMonth()+1) + '/' + time.getDate(),
