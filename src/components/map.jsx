@@ -6,7 +6,6 @@ import './map.css'
 
 
 const InnerMap = withGoogleMap(( props ) => {
-  console.log("here!!!!!!!!!!1",props.spaces)
   return(
     <GoogleMap
     id="map"
@@ -19,9 +18,9 @@ const InnerMap = withGoogleMap(( props ) => {
       />
       {
         props.spaces.map( (item, index) => {
-          console.log(item)
           return(
           <Marker 
+            key={index}
             id={index}
             onClick={()=>props.onClick_marker_handler(index)}
             position={{lat: item.data.position.lat, lng: item.data.position.lng}} 
@@ -34,7 +33,6 @@ const InnerMap = withGoogleMap(( props ) => {
 });
 
 const Map = (props) => {
-  console.log(props.spaces)
   return(
     <InnerMap
       onClick_marker_handler={props.onClick_marker_handler}

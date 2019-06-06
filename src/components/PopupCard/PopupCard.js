@@ -24,7 +24,6 @@ import './PopupCard.css'
 class PopupCard extends Component{
   constructor(props){
     super();
-    console.log(props.open_flag)
     this.state={
       copied: false,
       report_dialog: false,
@@ -42,13 +41,11 @@ class PopupCard extends Component{
     this.setState({popup_open: this.props.open_flag})
   }
   changeRating( newRating, name ) {
-    console.log(newRating)
     this.setState({
       rating: newRating
     });
   }
   render(){
-    console.log(this.state.popup_open)
     return(
       <div>
       <Dialog
