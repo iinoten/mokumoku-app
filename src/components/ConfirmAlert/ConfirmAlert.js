@@ -36,7 +36,7 @@ class ConfirmAlert extends Component{
       <DialogTitle id="alert-dialog-slide-title">{"進捗どうですか"}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-slide-description">
-          2時間もくもくしました．終わりますか？
+          {this.props.mokumoku_h}時間{this.props.mokumoku_min}分もくもくしました．終わりますか？
         </DialogContentText>
       </DialogContent>
       <DialogActions>

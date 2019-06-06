@@ -9,7 +9,7 @@ import ConfirmAlert from '../../components/ConfirmAlert/ConfirmAlert'
 
 import Count from '../../container/Count'
 
-const sec_delay = 100
+const sec_delay = 1
 
 class MokumokuPage extends Component{
   constructor(props){
@@ -103,6 +103,8 @@ class MokumokuPage extends Component{
           mokumoku_min={this.state.count_min}
           rating={3}/>
         <ConfirmAlert 
+          mokumoku_h={this.state.count_h}
+          mokumoku_min={this.state.count_min}
           open={this.state.confirm_open}
           onClick_ok={this.onClick_confirm_ok_button}
           onClick_cancel={this.onClick_confirm_canccel_button}/>

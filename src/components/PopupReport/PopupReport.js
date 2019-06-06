@@ -23,7 +23,14 @@ class PopupReport extends Component{
     }
   }
   onClick_submit_button = () => {
-    this.props.onClick_submit()
+    this.props.onClick_submit(
+      this.state.form_place_name, //場所の名前
+      this.state.form_do_phrase,  //なにをもくもくしたか
+      this.state.form_impression, //場所の感想
+      this.state.rating,          //星評価いくつか
+      this.props.mokumoku_h,      //何時間もくもくしたか
+      this.props.mokumoku_min     //何分もくもくしたか
+    )
   }
   onClick_star_rating = (rating) => {
     console.log(rating)
@@ -38,6 +45,11 @@ class PopupReport extends Component{
   onChange_form_impression = (e) => {
     this.setState({ form_impression: e.target.value})
   }
+  get_Unique_Str = (myStrong) => {
+    var strong = 1000;
+    if (myStrong) strong = myStrong;
+    return new Date().getTime().toString(16)  + Math.floor(strong*Math.random()).toString(16)
+   }
   render(){
     return(
       <div>
@@ -45,7 +57,7 @@ class PopupReport extends Component{
         <DialogTitle id="form-dialog-title">{this.props.mokumoku_h}時間{this.props.mokumoku_min}分，おつかれさまでした</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            もくもくの成果はどうでしたか？ フォームに記録しましょう!
+            {this.props.mokumoku_h + this.props.mokumoku_min}もくもくの成果はどうでしたか？ フォームに記録しましょう!
           </DialogContentText>
           <TextField
             value={this.state.form_place_name}
