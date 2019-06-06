@@ -62,10 +62,12 @@ class AccountPage extends Component{
 
   componentWillMount(){
     firebase.auth().onAuthStateChanged((user) => {
-      this.setState({
-        user: user.uid
-      })
-      this.props.update_uid(user.uid)
+      if(user){
+        this.setState({
+          user: user.uid
+        })
+        this.props.update_uid(user.uid)
+      }
     });
   }
 

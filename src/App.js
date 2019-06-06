@@ -18,7 +18,7 @@ class App extends Component{
     this.state = {
       lat: 35.693825,
       lng: 139.703356,
-      uid: ''
+      uid: null
     }
     firebase.initializeApp({
       apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -29,8 +29,11 @@ class App extends Component{
       .then((doc)=>{})
   }
   update_uid = (uid) => {
-    this.setState({ uid })
-    console.log(uid)
+    if(!this.state.uid){
+      alert('ログイン認証しました')
+      this.setState({ uid })
+      console.log(uid)
+    }
   }
   change_coordinate = (lat, lng) =>{
     this.setState({
