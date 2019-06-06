@@ -19,7 +19,6 @@ import './ReadyLogin.css'
 
 class ReadyLogin extends Component{
   render(){
-    console.log(this.props.user_name)
     return(
       <div>
         <Grid container justify="center" alignItems="center">

@@ -26,7 +26,6 @@ class Count extends Component{
   }
   toggle_count = () => {
     this.setState({ count_proceed: !this.state.count_proceed })
-    console.log("toggle")
   }
   componentDidMount(){
     setInterval(this.count_up, 5)

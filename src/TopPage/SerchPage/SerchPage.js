@@ -31,7 +31,6 @@ class SerchPage extends Component{
     })
   }
   componentDidMount(){
-    console.log(this.props.lat, this.props.lng)
     firebase.firestore().collection('mokumoku_space').get()
       .then((doc)=>{
         let place_data = [];

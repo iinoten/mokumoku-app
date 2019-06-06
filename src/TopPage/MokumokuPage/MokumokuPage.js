@@ -62,7 +62,6 @@ class MokumokuPage extends Component{
         if(user){
           this.setState({uid: user.uid})
           uid = user.uid;
-          console.log(uid)
         }
       })
       if(this.state.uid){

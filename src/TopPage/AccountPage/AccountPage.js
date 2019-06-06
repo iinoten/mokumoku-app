@@ -20,15 +20,12 @@ class AccountPage extends Component{
   }
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
-      console.log("hello",user.photoURL.replace('normal.jpg', '400x400.jpg'))
       let user_photoURL = user.photoURL.replace('normal.jpg', '400x400.jpg')
-      console.log(user)
       let user_name = user.displayName;
       this.setState({ user_photoURL, user_name })
       if(user){
         firebase.firestore().collection('users').doc(user.uid).get()
           .then((doc)=>{
-            console.log(Boolean(doc.data()));
             if(!doc.data()){
               firebase.firestore().collection('users').doc(user.uid).set({
                 name: user.displayName,
@@ -57,7 +54,6 @@ class AccountPage extends Component{
   }
   logout = () => {
     firebase.auth().signOut().then(this.setState({user: null}))
-    console.log("logout")
   }
 
   componentWillMount(){

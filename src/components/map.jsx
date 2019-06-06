@@ -18,7 +18,6 @@ const InnerMap = withGoogleMap(( props ) => {
       />
       {
         props.spaces.map( (item, index) => {
-          console.log(item)
           let sum = function(arr, fn) { //合計値割り出し
             if (fn) {
                 return sum(arr.map(fn));
@@ -37,7 +36,6 @@ const InnerMap = withGoogleMap(( props ) => {
             all_rating.push(impression.rating)
           )
           let ave_rating = Math.round(average(all_rating))
-          console.log(ave_rating)
           return(
             <div className="mokumoku_marker">
               <Marker 
