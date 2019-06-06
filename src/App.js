@@ -40,6 +40,18 @@ class App extends Component{
       lng: lng
     });
   }
+  componentDidMount(){
+    if(navigator.geolocation){
+      console.log("get now position");
+      navigator.geolocation.getCurrentPosition((position)=>{
+        this.setState({ lat: position.coords.latitude, lng: position.coords.longitude})
+        console.log("now place is", position.coords.latitude)
+      })
+      navigator.geolocation.watchPosition((position)=>{
+        this.setState({ lat: position.coords.latitude, lng: position.coords.longitude})
+      })
+    }
+  }
   render(){
     return(
       <BrowserRouter>
@@ -47,7 +59,7 @@ class App extends Component{
           <Switch>
             <Route exact path='/account' render={()=> <AccountPage test={"正解!!"} update_uid={this.update_uid} />} />
             <Route path='/mokumoku' render={()=> <MokumokuPage uid={this.state.uid} />} />
-            <Route path='/search' render={()=> <SerchPage />} />
+            <Route path='/search' render={()=> <SerchPage lat={this.state.lat} lng={this.state.lng} />} />
             <Redirect from='/' to='mokumoku' />
           </Switch>
           <BottomBar />

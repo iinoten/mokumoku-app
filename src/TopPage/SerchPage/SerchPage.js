@@ -24,7 +24,14 @@ class SerchPage extends Component{
       }
     }
   }
+  componentWillReceiveProps(){
+    this.setState({
+      lat: this.props.lat,
+      lng: this.props.lng
+    })
+  }
   componentDidMount(){
+    console.log(this.props.lat, this.props.lng)
     firebase.firestore().collection('mokumoku_space').get()
       .then((doc)=>{
         let place_data = [];
@@ -33,7 +40,6 @@ class SerchPage extends Component{
             id: doc.id,
             data: doc.data()
           })
-          console.log(doc.id)
         })
         this.setState({mokumoku_place: place_data})
       })
