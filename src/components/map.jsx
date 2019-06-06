@@ -18,13 +18,36 @@ const InnerMap = withGoogleMap(( props ) => {
       />
       {
         props.spaces.map( (item, index) => {
+          console.log(item)
+          let sum = function(arr, fn) { //合計値割り出し
+            if (fn) {
+                return sum(arr.map(fn));
+            }
+            else {
+              return arr.reduce(function(prev, current, i, arr) {
+                      return prev+current;
+              });
+            }
+          };
+          let average = function(arr, fn) {
+            return sum(arr, fn)/arr.length;
+          };
+          let all_rating = [];
+          item.data.impressions.map((impression)=>
+            all_rating.push(impression.rating)
+          )
+          let ave_rating = Math.round(average(all_rating))
+          console.log(ave_rating)
           return(
-          <Marker 
-            key={index}
-            id={index}
-            onClick={()=>props.onClick_marker_handler(index)}
-            position={{lat: item.data.position.lat, lng: item.data.position.lng}} 
-            icon={`${process.env.PUBLIC_URL}/picture/red_cloud.png`} />
+            <div className="mokumoku_marker">
+              <Marker 
+                key={index}
+                id={index}
+                className="mokumoku-marker"
+                onClick={()=>props.onClick_marker_handler(index)}
+                position={{lat: item.data.position.lat, lng: item.data.position.lng}} 
+                icon={`${process.env.PUBLIC_URL}/picture/` + ave_rating + '_pin.png'} />
+            </div>
           )}
         )
       }

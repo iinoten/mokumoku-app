@@ -3,3 +3,7 @@
   width: 30px;
   background-color: blue;
 }
+
+.mokumoku-marker{
+  transform: translateX(100px);
+}
