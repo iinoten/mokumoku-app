@@ -7,8 +7,8 @@ import ReadyLogin from '../../components/ReadyLogin/ReadyLogin'
 import './AccountPage.css'
 
 class AccountPage extends Component{
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state={
       loading: true,
       user: null,
@@ -62,10 +62,10 @@ class AccountPage extends Component{
 
   componentWillMount(){
     firebase.auth().onAuthStateChanged((user) => {
-      console.log("state change ",user)
       this.setState({
         user: user.uid
       })
+      this.props.update_uid(user.uid)
     });
   }
 
