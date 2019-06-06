@@ -7,8 +7,8 @@ import ReadyLogin from '../../components/ReadyLogin/ReadyLogin'
 import './AccountPage.css'
 
 class AccountPage extends Component{
-  constructor(props){
-    super(props);
+  constructor(){
+    super();
     this.state={
       loading: true,
       user: null,
