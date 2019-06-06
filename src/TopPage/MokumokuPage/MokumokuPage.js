@@ -27,6 +27,8 @@ class MokumokuPage extends Component{
 
       form_open: false,
       confirm_open: false,
+
+      uid: props.uid
     }
   }
 
@@ -51,12 +53,24 @@ class MokumokuPage extends Component{
     if(this.state.cancelable_count > 0){this.setState({ cancelable_count: this.state.cancelable_count -1 })}
   }
   onClick_start_button_handler = () => {
-    this.setState({
-      counting_now: !this.state.counting_now,
-      cancelable_count: 10
+    let uid;
+    firebase.auth().onAuthStateChanged((user) => {
+      if(user){
+        this.setState({uid: user.uid})
+        uid = user.uid;
+        console.log(uid)
+      }
     })
-      this.mokumoku_timer = setInterval(this.count_up, sec_delay);
-      this.count_down_cancelable_interval = setInterval(this.count_down_cancelable, sec_delay);
+    if(uid){
+      this.setState({
+        counting_now: !this.state.counting_now,
+        cancelable_count: 10
+      })
+        this.mokumoku_timer = setInterval(this.count_up, sec_delay);
+        this.count_down_cancelable_interval = setInterval(this.count_down_cancelable, sec_delay);
+    } else {
+      alert("先にaccountページでログインの確認をしてください")
+    }
   }
   onClick_cancel_button_handler=()=>{
     clearInterval(this.count_down_cancelable_interval)
@@ -93,8 +107,8 @@ class MokumokuPage extends Component{
   onClick_mokumoku_form_submit = (done,  time_h, time_min, place_id, rating, impression,) => {
     this.setState({ form_open:!this.state.form_open})
     console.log("clickerdd")
-    if(this.props.uid){
-    firebase.firestore().collection('users').doc(this.props.uid).get()
+    if(this.state.uid){
+    firebase.firestore().collection('users').doc(this.state.uid).get()
       .then((doc) => {
         console.log("Get new data!!!",doc.data())
         let temp_user_data = doc.data();
@@ -109,7 +123,7 @@ class MokumokuPage extends Component{
           impression
         })
         console.log(temp_user_data)
-        firebase.firestore().collection('users').doc(this.props.uid).set(temp_user_data)
+        firebase.firestore().collection('users').doc(this.state.uid).set(temp_user_data)
           .then(()=>console.log("success save user data"))
           .catch((err)=>console.log('Error save user data', err))
       })
