@@ -21,10 +21,9 @@ const InnerMap = withGoogleMap(( props ) => {
           let sum = function(arr, fn) { //合計値割り出し
             if (fn) {
                 return sum(arr.map(fn));
-            }
-            else {
+            } else {
               return arr.reduce(function(prev, current, i, arr) {
-                      return prev+current;
+                  return prev+current;
               });
             }
           };

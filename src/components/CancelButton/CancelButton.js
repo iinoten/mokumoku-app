@@ -13,7 +13,6 @@ import Button from '@material-ui/core/Button'
       this.props.onClick_stop_button()
     }
     onClick_cancel_button_handler = () => {
-      console.log("cancel button")
       this.props.onCick_cancel_button()
     }
     render(){
