@@ -67,6 +67,16 @@ class AccountPage extends Component{
     });
   }
 
+  onClick_config_bar = () => {
+    console.log("clicked config bar")
+  }
+  onClick_report_bar = () => {
+    console.log("clicked report bar")
+  }
+  onClick_description_bar = () => {
+    console.log('clicked description bar')
+  }
+
   render(){
       if (this.state.loading)return <div>loading</div>;
     return (
@@ -74,6 +84,9 @@ class AccountPage extends Component{
         <br />
         {this.state.user ?
           (<ReadyLogin 
+            onClick_config_bar={this.onClick_config_bar}
+            onClick_report_bar={this.onClick_report_bar}
+            onClick_description_bar={this.onClick_description_bar}
             user_name={this.state.user_name}
             user_photoURL={this.state.user_photoURL}
           />) :
