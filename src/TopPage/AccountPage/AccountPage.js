@@ -4,6 +4,7 @@ import firebase from 'firebase'
 import SignInScreen from '../../components/SignInScreen/SignInScreen'
 import ReadyLogin from '../../components/ReadyLogin/ReadyLogin'
 
+import ReportDialog from '../../components/ReportDialog/ReportDialog'
 import './AccountPage.css'
 
 class AccountPage extends Component{
@@ -20,10 +21,10 @@ class AccountPage extends Component{
   }
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
-      let user_photoURL = user.photoURL.replace('normal.jpg', '400x400.jpg')
-      let user_name = user.displayName;
-      this.setState({ user_photoURL, user_name })
       if(user){
+        let user_photoURL = user.photoURL.replace('normal.jpg', '400x400.jpg')
+        let user_name = user.displayName;
+        this.setState({ user_photoURL, user_name })
         firebase.firestore().collection('users').doc(user.uid).get()
           .then((doc)=>{
             if(!doc.data()){
@@ -43,7 +44,7 @@ class AccountPage extends Component{
             }
           })
           .catch((err)=>{
-            console("get Error:", err)
+            console.log("get Error:", err)
           })
         }
       });
@@ -67,11 +68,12 @@ class AccountPage extends Component{
     });
   }
 
+  onClick_report_bar = () => {
+    console.log("clicked report bar", this.props.uid)
+
+  }
   onClick_config_bar = () => {
     console.log("clicked config bar")
-  }
-  onClick_report_bar = () => {
-    console.log("clicked report bar")
   }
   onClick_description_bar = () => {
     console.log('clicked description bar')
@@ -81,6 +83,7 @@ class AccountPage extends Component{
       if (this.state.loading)return <div>loading</div>;
     return (
       <div>
+        <ReportDialog open={true}/>
         <br />
         {this.state.user ?
           (<ReadyLogin 

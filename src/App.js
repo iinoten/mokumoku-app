@@ -55,7 +55,7 @@ class App extends Component{
       <BrowserRouter>
         <div className='App'>
           <Switch>
-            <Route exact path='/account' render={()=> <AccountPage test={"正解!!"} update_uid={this.update_uid} />} />
+            <Route exact path='/account' render={()=> <AccountPage test={"正解!!"} update_uid={this.update_uid} uid={this.state.uid} />} />
             <Route path='/mokumoku' render={()=> <MokumokuPage uid={this.state.uid} />} />
             <Route path='/search' render={()=> <SerchPage lat={this.state.lat} lng={this.state.lng} />} />
             <Redirect from='/' to='mokumoku' />
