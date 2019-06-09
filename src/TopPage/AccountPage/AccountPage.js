@@ -18,11 +18,10 @@ class AccountPage extends Component{
       user_name: '',
       user_profile: '',
       dialog_open: false,
-
+      dialog_data: []
     }
   }
   componentDidMount() {
-    console.log(this.props.uid)
     firebase.auth().onAuthStateChanged(user => {
       if(user){
         let user_photoURL = user.photoURL.replace('normal.jpg', '400x400.jpg')

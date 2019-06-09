@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import firebase from 'firebase'
+import update from 'immutability-helper'
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -59,7 +60,8 @@ class ReportDialog extends Component{
     this.state={
       open: false,
       list_open: false,
-      work_log: []
+      work_log: [],
+      is_put_data: 0
     }
   }
   componentDidMount(){
@@ -77,28 +79,41 @@ class ReportDialog extends Component{
     this.props.onClick_dialog_button_handler()
   }
   componentWillReceiveProps(){
-    let tmp_work_log = [];
+    let is_put_data = true;
+    console.log("たぶんここを3かいしている", this.state.is_put_data);
+    if(this.state.is_put_data < 4){
+    console.log("んこを3かいしている", this.state.is_put_data);
+    this.setState({is_put_data: []})
     if(this.props.uid){
       firebase.firestore().collection('users').doc(this.props.uid).get()
-        .then((doc)=>{
-          console.log(doc.data())
-          doc.data().mokumoku_history.map((item, i)=>{
-            tmp_work_log.unshift({
-              time: {h: item.time.h, min: item.time.min},
-              done: item.done,
-              date: (item.date? item.date : null),
-              place: item.place_id
+      .then((doc)=>{
+        doc.data().mokumoku_history.map((item, i)=>{
+              this.setState({
+                work_log: update( this.state.work_log, {
+                  $unshift: [{
+                    time: {h: item.time.h, min: item.time.min},
+                    done: item.done,
+                    date: (item.date? item.date : null),
+                    place: item.place_id
+                  }]
+                })
+              })
             })
           })
-        })
-        .catch((err)=>{
-          console.log("Failed get user mokumoku data", err)
-        })
-      this.setState({work_log: tmp_work_log})
-    }
+          .catch((err)=>{
+            console.log("Failed get user mokumoku data", err);
+          })
+        }
+        this.setState({is_put_data: this.state.is_put_data + 1})
+      }
   }
   render(){
-    console.log(this.state.work_log)
+    this.state.work_log.map((item) => {
+      console.log("item")
+    })
+    for (let i = 0; i < this.state.work_log.length; i++) {
+      console.log(this.state.work_log[i])
+    }
     return(
       <div>
         <Dialog 
@@ -116,7 +131,7 @@ class ReportDialog extends Component{
             >
             <div style={{overflow: "auto", maxHeight: '40vh'}}>
               {
-                sample_report.map((item, i)=>{
+                this.state.work_log.map((item, i)=>{
                   return (
                     <div>
                       <ReportItem
