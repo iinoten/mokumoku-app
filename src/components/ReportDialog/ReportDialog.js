@@ -15,6 +15,8 @@ import Button from '@material-ui/core/Button/Button';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
+import ReportItem from '../ReportItem/ReportItem'
+
 import './ReportDialog.css'
 
 var sample_report = [
@@ -86,16 +88,10 @@ class ReportDialog extends Component{
                 sample_report.map((item, i)=>{
                   return (
                     <div>
-                      <ListItem>
-                        <ListItemText primary={item.done} />
-                      </ListItem>
-                      <Collapse in={false} timeout="auto" unmountOnExit>
-                        <List component="div" disablePadding>
-                          <ListItem button>
-                            <ListItemText primary={item.place} />
-                          </ListItem>
-                        </List>
-                      </Collapse>
+                      <ReportItem
+                        place={item.place}
+                        done={item.done}
+                      />
                     </div>
                   )
                 })
