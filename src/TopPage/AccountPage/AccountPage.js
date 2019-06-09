@@ -16,7 +16,8 @@ class AccountPage extends Component{
 
       user_photoURL: '',
       user_name: '',
-      user_profile: ''
+      user_profile: '',
+      dialog_open: false
     }
   }
   componentDidMount() {
@@ -69,8 +70,8 @@ class AccountPage extends Component{
   }
 
   onClick_report_bar = () => {
+    this.setState({dialog_open: !this.state.dialog_open})
     console.log("clicked report bar", this.props.uid)
-
   }
   onClick_config_bar = () => {
     console.log("clicked config bar")
@@ -79,11 +80,15 @@ class AccountPage extends Component{
     console.log('clicked description bar')
   }
 
+  onClick_dialog_button_handler = () => {
+    this.setState({dialog_open: !this.state.dialog_open})
+  }
+
   render(){
       if (this.state.loading)return <div>loading</div>;
     return (
       <div>
-        <ReportDialog open={true}/>
+        <ReportDialog open={this.state.dialog_open} onClick_dialog_button_handler={this.onClick_dialog_button_handler}/>
         <br />
         {this.state.user ?
           (<ReadyLogin 

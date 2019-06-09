@@ -68,6 +68,9 @@ class ReportDialog extends Component{
   handle_click_list = () => {
     this.setState({ list_open: !  this.state.list_open })
   }
+  onClick_dialog_button_handler = () => {
+    this.props.onClick_dialog_button_handler()
+  }
   render(){
     return(
       <div>
@@ -103,8 +106,8 @@ class ReportDialog extends Component{
             </List>
           </DialogContent>
           <DialogActions>
-            <Button color="primary" onClick={console.log("clicked")}>
-              完了!
+            <Button color="primary" onClick={this.onClick_dialog_button_handler}>
+              閉じる
             </Button>
           </DialogActions>
         </Dialog>
