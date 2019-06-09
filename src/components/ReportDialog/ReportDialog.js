@@ -17,18 +17,38 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import './ReportDialog.css'
 
-const styles = theme => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
+var sample_report = [
+  {
+    done: "仕事の勉強",
+    place: "ハッカースペース新宿",
+    time: {h: 2, min: 30},
+    date: "2019/6/9 17:54"
   },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
+  {
+    done: "仕事の勉強",
+    place: "ハッカースペース新宿",
+    time: {h: 2, min: 30},
+    date: "2019/6/9 17:54"
   },
-});
+  {
+    done: "仕事の勉強",
+    place: "ハッカースペース新宿",
+    time: {h: 2, min: 30},
+    date: "2019/6/9 17:54"
+  },
+  {
+    done: "仕事の勉強",
+    place: "ハッカースペース新宿",
+    time: {h: 2, min: 30},
+    date: "2019/6/9 17:54"
+  },
+  {
+    done: "仕事の勉強",
+    place: "ハッカースペース新宿",
+    time: {h: 2, min: 30},
+    date: "2019/6/9 17:54"
+  }
+]
 
 class ReportDialog extends Component{
   constructor(){
@@ -49,7 +69,12 @@ class ReportDialog extends Component{
   render(){
     return(
       <div>
-        <Dialog open={this.props.open} aria-labelledby="form-dialog-title">
+        <Dialog 
+          maxWidth="sm"
+          fullWidth={true}
+          open={this.props.open} 
+          aria-labelledby="form-dialog-title"
+        >
           <DialogContent>
             <List 
               component="nav"
@@ -57,6 +82,25 @@ class ReportDialog extends Component{
                 <ListSubHeader component="div">もくもくレポート</ListSubHeader>
               }
             >
+              {
+                sample_report.map((item, i)=>{
+                  return (
+                    <div>
+                      <ListItem>
+                        <ListItemText primary={item.done} />
+                      </ListItem>
+                      <Collapse in={false} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding>
+                          <ListItem button>
+                            <ListItemText primary={item.place} />
+                          </ListItem>
+                        </List>
+                      </Collapse>
+                    </div>
+                  )
+                })
+              }
+              {/*
               <ListItem>
                 <ListItemText primary="勉強" />
               </ListItem>
@@ -74,7 +118,7 @@ class ReportDialog extends Component{
                   </ListItem>
                 </List>
               </Collapse>
-
+              */}
             </List>
           </DialogContent>
           <DialogActions>
