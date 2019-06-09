@@ -11,7 +11,6 @@ import BottomBar from './components/BottomBar/BottomBar'
 
 
 import firebase from 'firebase'
-var appId = process.env.REACT_APP_API_URL;
 class App extends Component{
   constructor(props){
     super(props)

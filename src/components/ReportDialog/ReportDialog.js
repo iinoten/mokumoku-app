@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import firebase from 'firebase'
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -57,8 +58,12 @@ class ReportDialog extends Component{
     super();
     this.state={
       open: false,
-      list_open: false
+      list_open: false,
+      work_log: []
     }
+  }
+  componentDidMount(){
+    console.log(this.props.uid)
   }
   handleClickOpen = () => {
     this.setState({
@@ -71,7 +76,29 @@ class ReportDialog extends Component{
   onClick_dialog_button_handler = () => {
     this.props.onClick_dialog_button_handler()
   }
+  componentWillReceiveProps(){
+    let tmp_work_log = [];
+    if(this.props.uid){
+      firebase.firestore().collection('users').doc(this.props.uid).get()
+        .then((doc)=>{
+          console.log(doc.data())
+          doc.data().mokumoku_history.map((item, i)=>{
+            tmp_work_log.unshift({
+              time: {h: item.time.h, min: item.time.min},
+              done: item.done,
+              date: (item.date? item.date : null),
+              place: item.place_id
+            })
+          })
+        })
+        .catch((err)=>{
+          console.log("Failed get user mokumoku data", err)
+        })
+      this.setState({work_log: tmp_work_log})
+    }
+  }
   render(){
+    console.log(this.state.work_log)
     return(
       <div>
         <Dialog 

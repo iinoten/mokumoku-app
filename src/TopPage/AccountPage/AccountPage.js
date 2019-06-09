@@ -17,10 +17,12 @@ class AccountPage extends Component{
       user_photoURL: '',
       user_name: '',
       user_profile: '',
-      dialog_open: false
+      dialog_open: false,
+
     }
   }
   componentDidMount() {
+    console.log(this.props.uid)
     firebase.auth().onAuthStateChanged(user => {
       if(user){
         let user_photoURL = user.photoURL.replace('normal.jpg', '400x400.jpg')
@@ -71,7 +73,7 @@ class AccountPage extends Component{
 
   onClick_report_bar = () => {
     this.setState({dialog_open: !this.state.dialog_open})
-    console.log("clicked report bar", this.props.uid)
+    //console.log("clicked report bar", this.props.uid)
   }
   onClick_config_bar = () => {
     console.log("clicked config bar")
@@ -83,12 +85,17 @@ class AccountPage extends Component{
   onClick_dialog_button_handler = () => {
     this.setState({dialog_open: !this.state.dialog_open})
   }
+  componentWillReceiveProps() {
+  }
 
   render(){
       if (this.state.loading)return <div>loading</div>;
     return (
       <div>
-        <ReportDialog open={this.state.dialog_open} onClick_dialog_button_handler={this.onClick_dialog_button_handler}/>
+        <ReportDialog 
+          open={this.state.dialog_open} 
+          onClick_dialog_button_handler={this.onClick_dialog_button_handler}
+          uid={this.state.user}/>
         <br />
         {this.state.user ?
           (<ReadyLogin 

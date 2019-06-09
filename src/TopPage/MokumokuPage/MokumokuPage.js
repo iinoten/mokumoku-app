@@ -131,9 +131,11 @@ class MokumokuPage extends Component{
     if(this.state.uid){
     firebase.firestore().collection('users').doc(this.state.uid).get()
       .then((doc) => {
+        let hiduke = new Date();
         let temp_user_data = doc.data();
         temp_user_data.mokumoku_history.unshift({
           place_id,
+          date: hiduke.getFullYear() + "/" + (hiduke.getMonth()+1) + "/" + hiduke.getDay() + " " + hiduke.getHours() + ":" + hiduke.getMinutes(),
           time: {
             h: time_h,
             min: time_min
