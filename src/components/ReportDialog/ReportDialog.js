@@ -79,33 +79,30 @@ class ReportDialog extends Component{
     this.props.onClick_dialog_button_handler()
   }
   componentWillReceiveProps(){
-    let is_put_data = true;
+    let is_put_data = [];
+    let tmp_log_data = []
     console.log("たぶんここを3かいしている", this.state.is_put_data);
-    if(this.state.is_put_data < 4){
     console.log("んこを3かいしている", this.state.is_put_data);
     this.setState({is_put_data: []})
     if(this.props.uid){
       firebase.firestore().collection('users').doc(this.props.uid).get()
       .then((doc)=>{
         doc.data().mokumoku_history.map((item, i)=>{
-              this.setState({
-                work_log: update( this.state.work_log, {
-                  $unshift: [{
-                    time: {h: item.time.h, min: item.time.min},
-                    done: item.done,
-                    date: (item.date? item.date : null),
-                    place: item.place_id
-                  }]
+          is_put_data.push("aiueo");
+                tmp_log_data.unshift({
+                  time: {h: item.time.h, min: item.time.min},
+                  done: item.done,
+                  date: (item.date? item.date : null),
+                  place: item.place_id
                 })
               })
             })
-          })
           .catch((err)=>{
             console.log("Failed get user mokumoku data", err);
           })
         }
-        this.setState({is_put_data: this.state.is_put_data + 1})
-      }
+        console.log(is_put_data)
+      console.log(tmp_log_data)
   }
   render(){
     this.state.work_log.map((item) => {
