@@ -16,6 +16,8 @@ var perfect_address;
 class MokumokuPage extends Component{
   constructor(props){
     super(props);
+    console.log(props)
+    console.log("at constructor", this.props.uid)
     this.state = {
       count_s: 0,
       count_min: 0,
@@ -65,6 +67,7 @@ class MokumokuPage extends Component{
         }
       })
       if(this.state.uid){
+        console.log("UID!!!!!!!!!!!!!!!!!!!!!!!!!!!",this.state.uid)
         this.setState({
           counting_now: !this.state.counting_now,
           cancelable_count: 10
@@ -72,6 +75,7 @@ class MokumokuPage extends Component{
           this.mokumoku_timer = setInterval(this.count_up, sec_delay);
           this.count_down_cancelable_interval = setInterval(this.count_down_cancelable, sec_delay);
       } else {
+        console.log("UID!!!!!!!!!!!!!!!!!!!!!!!!!!!",this.state.uid)
         alert("先にaccountページでログインの確認をしてください")
       }
     } else {
@@ -173,6 +177,7 @@ class MokumokuPage extends Component{
       .catch((err)=>console.log(err))
   }
   componentDidMount(){
+    console.log("didmount", this.props.uid)
     navigator.geolocation.getCurrentPosition((position) => {
       this.setState({now_position: {lat: position.coords.latitude, lng: position.coords.longitude}})
       axios.get('https://maps.googleapis.com/maps/api/geocode/json?key=' + process.env.REACT_APP_GOOGLE_MAPS_API + '&latlng=' + position.coords.latitude + ',' + position.coords.longitude + '&sensor=false')
