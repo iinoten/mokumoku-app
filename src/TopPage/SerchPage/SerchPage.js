@@ -10,8 +10,8 @@ class SerchPage extends Component{
   constructor(props){
     super();
     this.state={
-      lat: 35.6846829,
-      lng: 139.6969829,
+      lat: props.lat,
+      lng: props.lng,
     
       popup_open_flag: false,
       mokumoku_place: [],
