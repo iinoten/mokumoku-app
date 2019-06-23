@@ -15,8 +15,8 @@ class App extends Component{
   constructor(props){
     super(props)
     this.state = {
-      lat: 35.693825,
-      lng: 139.703356,
+      lat: null,
+      lng: null,
     }
     firebase.initializeApp({
       apiKey: process.env.REACT_APP_FIREBASE_API_KEY,

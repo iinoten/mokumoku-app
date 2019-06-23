@@ -110,6 +110,7 @@ class MokumokuPage extends Component{
   }
 
   onClick_mokumoku_form_submit = (done,  time_h, time_min, place_id, rating, impression, place_name) => {
+    console.log(this.state.uid)
     let time = new Date();
     let  temp_now_address;
     navigator.geolocation.getCurrentPosition((position) => {
@@ -143,7 +144,8 @@ class MokumokuPage extends Component{
           rating,
           impression
         })
-        firebase.firestore().collection('users').doc(this.state.uid).set(temp_user_data)
+        var place_db = firebase.firestore()
+        place_db.collection('users').doc(this.state.uid).set(temp_user_data)
           .then(()=>console.log("success save user data"))
           .catch((err)=>console.log('Error save user data', err))
       })
