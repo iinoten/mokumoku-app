@@ -58,7 +58,7 @@ class MokumokuPage extends Component{
     if(this.state.cancelable_count > 0){this.setState({ cancelable_count: this.state.cancelable_count -1 })}
   }
   onClick_start_button_handler = () => {
-    if(navigator.geolocation){
+    if(this.state.now_position.lat && this.state.now_position.lng){
       let uid;
       firebase.auth().onAuthStateChanged((user) => {
         if(user){
@@ -75,7 +75,6 @@ class MokumokuPage extends Component{
           this.mokumoku_timer = setInterval(this.count_up, sec_delay);
           this.count_down_cancelable_interval = setInterval(this.count_down_cancelable, sec_delay);
       } else {
-        console.log("UID!!!!!!!!!!!!!!!!!!!!!!!!!!!",this.state.uid)
         alert("先にaccountページでログインの確認をしてください")
       }
     } else {
@@ -114,6 +113,7 @@ class MokumokuPage extends Component{
   }
 
   onClick_mokumoku_form_submit = (done,  time_h, time_min, place_id, rating, impression, place_name) => {
+    console.log("えらーーーーーー", Boolean(navigator.geolocation))
     let time = new Date();
     
     var temp_now_address;
@@ -160,7 +160,7 @@ class MokumokuPage extends Component{
       .then((doc)=>{
         if(!doc.data()){
           firebase.firestore().collection('mokumoku_space').doc(place_id).set({
-            position: {lat: this.state.now_position.lat, lng: this.state.now_position.lng},
+            position: {lat:this.state.lat, lng: this.state.lng},
             impressions: [{
               comment: impression,
               date: time.getFullYear() + '/' + (time.getMonth()+1) + '/' + time.getDate(),
@@ -172,6 +172,7 @@ class MokumokuPage extends Component{
             name: place_name
           })
           .then(console.log("save place data"))
+          .catch(err=>console.log("Error, cant save place data", err))
         }
       })
       .catch((err)=>console.log(err))
