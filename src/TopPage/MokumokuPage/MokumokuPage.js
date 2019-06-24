@@ -60,7 +60,7 @@ class MokumokuPage extends Component{
     if(this.state.cancelable_count > 0){this.setState({ cancelable_count: this.state.cancelable_count -1 })}
   }
   onClick_start_button_handler = () => {
-    if(navigator.geolocation){
+    if(this.state.now_position.lat && this.state.now_position.lng){
       let uid;
       firebase.auth().onAuthStateChanged((user) => {
         if(user){
@@ -114,7 +114,6 @@ class MokumokuPage extends Component{
   }
 
   onClick_mokumoku_form_submit = (done,  time_h, time_min, place_id, rating, impression, place_name) => {
-    console.log(this.state.uid)
     let time = new Date();
     let  temp_now_address;
     navigator.geolocation.getCurrentPosition((position) => {
@@ -161,7 +160,7 @@ class MokumokuPage extends Component{
       .then((doc)=>{
         if(!doc.data()){
           firebase.firestore().collection('mokumoku_space').doc(place_id).set({
-            position: {lat: this.props.lat, lng: this.props.lng},
+            position: {lat:this.state.lat, lng: this.state.lng},
             impressions: [{
               comment: impression,
               date: time.getFullYear() + '/' + (time.getMonth()+1) + '/' + time.getDate(),
@@ -173,6 +172,7 @@ class MokumokuPage extends Component{
             name: place_name
           })
           .then(console.log("save place data"))
+          .catch(err=>console.log("Error, cant save place data", err))
         }
       })
       .catch((err)=>console.log(err))

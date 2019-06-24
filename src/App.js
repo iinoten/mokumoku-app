@@ -46,11 +46,14 @@ class App extends Component{
     console.log("appjs DidMount", this.state.uid)
     if(navigator.geolocation){
       navigator.geolocation.getCurrentPosition((position)=>{
-        this.setState({ lat: position.coords.latitude, lng: position.coords.longitude})
+        this.setState({ lat: this.state.lat, lng: this.state.lng})
       })
       navigator.geolocation.watchPosition((position)=>{
         this.setState({ lat: position.coords.latitude, lng: position.coords.longitude})
+        console.log(position.coords.latitude, position.coords.longitude)
       })
+    } else {
+      console.log("not found geo location")
     }
     firebase.auth().onAuthStateChanged((user)=>{
       this.setState({uid: user.uid})
