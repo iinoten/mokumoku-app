@@ -13,7 +13,7 @@ import BottomBar from './components/BottomBar/BottomBar'
 import firebase from 'firebase'
 class App extends Component{
   constructor(props){
-    super(props)
+    super()
     this.state = {
       lat: null,
       lng: null,
@@ -57,13 +57,12 @@ class App extends Component{
     })
   }
   render(){
-    console.log()
     return(
       <BrowserRouter>
         <div className='App'>
           <Switch>
-            <Route exact path='/account' render={()=> <AccountPage test={"正解!!"} update_uid={this.update_uid} uid={this.state.uid} />} />
-            {this.state.uid ? <Route path='/mokumoku' render={()=> <MokumokuPage uid={this.state.uid} />} /> : null }
+            <Route exact path='/account' render={()=> <AccountPage update_uid={this.update_uid} uid={this.state.uid} />} />
+            {this.state.uid ? <Route path='/mokumoku'render={()=> <MokumokuPage  lat={this.state.lat} lng={this.state.lng} uid={this.state.uid} />} /> : null }
             <Route path='/search' render={()=> <SerchPage lat={this.state.lat} lng={this.state.lng} />} />
             {this.state.uid?<Redirect from='/' to='mokumoku' />:<Redirect from='/' to='account' />}
             <Redirect from='/' to='mokumoku' />

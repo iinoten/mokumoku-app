@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import firebase from 'firebase'
 
+import {BounceLoader} from 'react-spinners' 
+
 import Map from '../../components/map'
 import PopupCard from '../../components/PopupCard/PopupCard'
 
@@ -83,22 +85,43 @@ class SerchPage extends Component{
     this.setState({popup_open_flag: false})
   }
   render(){
-    return(
-      <div>
-        <Map 
-          onClick_marker_handler={this.onClick_marker_handler} 
-          spaces={this.state.mokumoku_place} 
-          id="map" 
-          lat={this.state.lat} lng={this.state.lng} />
-        <PopupCard 
-          close_handler={this.onClick_pop_close_button_handler} 
-          open_flag={this.state.popup_open_flag} 
-          title={this.state.popup_data.place_title} 
-          ave_time={this.state.popup_data.ave_time} 
-          rating={this.state.popup_data.rating} 
-          address={this.state.popup_data.address} />
+    if(navigator.geolocation){
+      return(
+        <div>
+          {
+            (!(this.props.lat && this.props.lng)) ?
+              <div className="loading-bouncer">
+                <BounceLoader
+                  sizeUnit={"px"}
+                  size={150}
+                  color={'#96ed98'}
+                  loading={true}
+                />
+                <div id="loading-title">
+                  位置情報の取得中です
+                </div>
+              </div>
+            :
+            <div>
+              <div>
+                <Map 
+                  onClick_marker_handler={this.onClick_marker_handler} 
+                  spaces={this.state.mokumoku_place} 
+                  id="map" 
+                  lat={this.state.lat} lng={this.state.lng} />
+                <PopupCard 
+                  close_handler={this.onClick_pop_close_button_handler} 
+                  open_flag={this.state.popup_open_flag} 
+                  title={this.state.popup_data.place_title} 
+                  ave_time={this.state.popup_data.ave_time} 
+                  rating={this.state.popup_data.rating} 
+                  address={this.state.popup_data.address} />
+              </div>
+            </div>
+          }
       </div>
-    );
+      )
+    }
   }
 }
 

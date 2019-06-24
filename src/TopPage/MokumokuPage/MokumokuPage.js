@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import firebase from 'firebase'
 import axios from 'axios'
+import {BounceLoader} from 'react-spinners' 
+
+import './Mokumoku.css'
 
 import WordCard from '../../components/WordCard/WordCard'
 import StartButton from '../../components/StartButton/StartButton'
@@ -13,9 +16,10 @@ const sec_delay = 1
 
 var perfect_address;
 
+
 class MokumokuPage extends Component{
   constructor(props){
-    super(props);
+    super();
     this.state = {
       count_s: 0,
       count_min: 0,
@@ -157,7 +161,7 @@ class MokumokuPage extends Component{
       .then((doc)=>{
         if(!doc.data()){
           firebase.firestore().collection('mokumoku_space').doc(place_id).set({
-            position: {lat: this.state.now_position.lat, lng: this.state.now_position.lng},
+            position: {lat: this.props.lat, lng: this.props.lng},
             impressions: [{
               comment: impression,
               date: time.getFullYear() + '/' + (time.getMonth()+1) + '/' + time.getDate(),
@@ -202,31 +206,50 @@ class MokumokuPage extends Component{
     )
   }
   render(){
-    return(
-      <div>
-        <WordCard />
-        <PopupReport 
-          open={this.state.form_open}
-          onClick_submit={this.onClick_mokumoku_form_submit}
-          mokumoku_h={this.state.count_h}
-          mokumoku_min={this.state.count_min}
-          rating={3}/>
-        <ConfirmAlert 
-          mokumoku_h={this.state.count_h}
-          mokumoku_min={this.state.count_min}
-          open={this.state.confirm_open}
-          onClick_ok={this.onClick_confirm_ok_button}
-          onClick_cancel={this.onClick_confirm_canccel_button}/>
-        {this.state.counting_now? 
-          <CancelButton 
-            cancelable_count={this.state.cancelable_count}
-            onClick_stop_button={this.onClick_stop_button_handler}
-            onCick_cancel_button={this.onClick_cancel_button_handler} />
-          :
-          <StartButton onClick={this.onClick_start_button_handler}/>
-        }
+    if(navigator.geolocation){
+      return(
+        <div>
+          {
+            (!(this.props.lat && this.props.lng)) ?
+              <div className="loading-bouncer">
+                <BounceLoader
+                  sizeUnit={"px"}
+                  size={150}
+                  color={'#96ed98'}
+                  loading={true}
+                />
+                <div id="loading-title">
+                  位置情報の取得中です
+                </div>
+              </div>
+            :
+            <div>
+            <WordCard />
+            <PopupReport 
+              open={this.state.form_open}
+              onClick_submit={this.onClick_mokumoku_form_submit}
+              mokumoku_h={this.state.count_h}
+              mokumoku_min={this.state.count_min}
+              rating={3} />
+            <ConfirmAlert 
+              mokumoku_h={this.state.count_h}
+              mokumoku_min={this.state.count_min}
+              open={this.state.confirm_open}
+              onClick_ok={this.onClick_confirm_ok_button}
+              onClick_cancel={this.onClick_confirm_canccel_button}/>
+            {this.state.counting_now? 
+              <CancelButton 
+                cancelable_count={this.state.cancelable_count}
+                onClick_stop_button={this.onClick_stop_button_handler}
+                onCick_cancel_button={this.onClick_cancel_button_handler} />
+              :
+              <StartButton onClick={this.onClick_start_button_handler}/>
+            }
+            </div>
+          }
       </div>
-    );
+      )
+    }
   }
 }
 
