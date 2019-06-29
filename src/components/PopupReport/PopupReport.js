@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Rating from 'material-ui-rating'
+import firebase from 'firebase';
 
 import './PopupReport.css'
 
@@ -55,6 +56,16 @@ class PopupReport extends Component{
    }
    onClick_inference_chip = (id) => {
      console.log("helloooo", id)
+     firebase.firestore().collection('mokumoku_space').doc(id).get()
+      .then((doc)=>{
+        console.log(doc.data());
+        this.setState({
+          form_place_name: doc.data().name
+        })
+      })
+      .catch((err)=>{
+        console.warn("Failed get inference data:", err)
+      })
    }
   render(){
     let anti_place_chip = [];
