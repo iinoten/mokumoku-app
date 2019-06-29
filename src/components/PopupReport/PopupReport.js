@@ -53,11 +53,14 @@ class PopupReport extends Component{
     if (myStrong) strong = myStrong;
     return new Date().getTime().toString(16)  + Math.floor(strong*Math.random()).toString(16)
    }
+   onClick_inference_chip = (id) => {
+     console.log("helloooo", id)
+   }
   render(){
     let anti_place_chip = [];
     for (let i = 0; i < this.props.near_place.length; i++) {
        const element = this.props.near_place[i]; 
-       anti_place_chip.push(<Chip className="anti-place-chip" label={element} />) 
+       anti_place_chip.push(<Chip className="anti-place-chip" label={element.name} key={i} onClick={() => this.onClick_inference_chip(element.id)} />) 
     }
     return(
       <div>

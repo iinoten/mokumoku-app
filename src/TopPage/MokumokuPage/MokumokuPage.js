@@ -74,7 +74,10 @@ class MokumokuPage extends Component{
             console.log("nere here")
             this.setState({
               near_place: update(this.state.near_place, {
-                $push: [places_data.name]
+                $push: [{
+                  name: places_data.name,
+                  id: doc.id
+                }]
               })
             })
           }
@@ -139,7 +142,9 @@ class MokumokuPage extends Component{
       form_open: !this.state.form_open,
     })
   }
-
+  onClick_inference_chip = (id) => {
+    console.log("click chip:", id)
+  }
   onClick_mokumoku_form_submit = (done,  time_h, time_min, place_id, rating, impression, place_name) => {
     console.log("えらーーーーーー", Boolean(navigator.geolocation))
     let time = new Date();
@@ -243,6 +248,7 @@ class MokumokuPage extends Component{
           mokumoku_h={this.state.count_h}
           mokumoku_min={this.state.count_min}
           near_place={this.state.near_place}
+          onClick_inference_chip={this.onClick_inference_chip}
           rating={3}/>
         <ConfirmAlert 
           mokumoku_h={this.state.count_h}
