@@ -66,13 +66,12 @@ class MokumokuPage extends Component{
         querySnapshot.forEach((doc)=>{
           console.log("get places data", doc.id, "==>", doc.data())
           let places_data = doc.data();
-          console.log(places_data)
           if(
-            ( (places_data.position.lat <= (this.props.lat+0.001)) && (places_data.position.lat >= (this.props.lat-0.001)) )
+            ((this.props.lat+0.001) >= places_data.position.lat) && ( places_data.position.lat >= (this.props.lat-0.001))
             &&
-            ( (places_data.position.lng <= (this.props.lng+0.001)) && (places_data.position.lng >= (this.props.lat-0.001)) )
+            ( (this.props.lng+0.001) >= places_data.position.lng ) && ( places_data.position.lng >= (this.props.lng-0.001))
           ) {
-            console.log("nere here", places_data)
+            console.log("nere here")
             this.setState({
               near_place: update(this.state.near_place, {
                 $push: [places_data.name]

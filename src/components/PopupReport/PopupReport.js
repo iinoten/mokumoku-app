@@ -11,6 +11,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip'
 
 class PopupReport extends Component{
   constructor(props){
@@ -53,6 +54,11 @@ class PopupReport extends Component{
     return new Date().getTime().toString(16)  + Math.floor(strong*Math.random()).toString(16)
    }
   render(){
+    let anti_place_chip = [];
+    for (let i = 0; i < this.props.near_place.length; i++) {
+       const element = this.props.near_place[i]; 
+       anti_place_chip.push(<Chip className="anti-place-chip" label={element} />) 
+    }
     return(
       <div>
         <Dialog open={this.props.open}aria-labelledby="form-dialog-title">
@@ -72,6 +78,7 @@ class PopupReport extends Component{
             fullWidth
             autoComplete="off"
           />
+          もしかして：{anti_place_chip}
           <TextField
             value={this.state.form_do_phrase}
             onChange={e=>this.onChange_do_phrase_form(e)}
