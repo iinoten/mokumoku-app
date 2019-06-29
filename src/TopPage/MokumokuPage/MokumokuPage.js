@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import firebase from 'firebase'
 import axios from 'axios'
+import update from 'immutability-helper'
 
 import WordCard from '../../components/WordCard/WordCard'
 import StartButton from '../../components/StartButton/StartButton'
@@ -33,7 +34,9 @@ class MokumokuPage extends Component{
 
       uid: props.uid,
       now_address: '',
-      now_position: {lat: null, lng: null}
+      now_position: {lat: null, lng: null},
+
+      near_place: []
     }
   }
 
@@ -57,7 +60,24 @@ class MokumokuPage extends Component{
   count_down_cancelable = () => {
     if(this.state.cancelable_count > 0){this.setState({ cancelable_count: this.state.cancelable_count -1 })}
   }
+  get_near_mokumoku_place = (lat) => {  //付近の場所を取得
+    firebase.firestore().collection('mokumoku_space').get()
+      .then((querySnapshot)=>{
+        querySnapshot.forEach((doc)=>{
+          console.log("get places data", doc.id, "==>", doc.data())
+          this.setState({
+            near_place: update(this.state.near_place, {
+              $push: [doc.data().name]
+            })
+          })
+        })
+      })
+      .catch((err => {
+        console.log("Failed get places data:", err);
+      }))
+  }
   onClick_start_button_handler = () => {
+    this.get_near_mokumoku_place();
     if(this.state.now_position.lat && this.state.now_position.lng){
       let uid;
       firebase.auth().onAuthStateChanged((user) => {
@@ -160,7 +180,7 @@ class MokumokuPage extends Component{
       .then((doc)=>{
         if(!doc.data()){
           firebase.firestore().collection('mokumoku_space').doc(place_id).set({
-            position: {lat:this.state.lat, lng: this.state.lng},
+            position: {lat:this.props.lat, lng: this.props.lng},
             impressions: [{
               comment: impression,
               date: time.getFullYear() + '/' + (time.getMonth()+1) + '/' + time.getDate(),
@@ -206,6 +226,7 @@ class MokumokuPage extends Component{
     )
   }
   render(){
+    console.log("logging success", this.state.near_place)
     return(
       <div>
         <WordCard />
@@ -214,6 +235,7 @@ class MokumokuPage extends Component{
           onClick_submit={this.onClick_mokumoku_form_submit}
           mokumoku_h={this.state.count_h}
           mokumoku_min={this.state.count_min}
+          near_place={["モクモク部屋","スターバックス"]}
           rating={3}/>
         <ConfirmAlert 
           mokumoku_h={this.state.count_h}
