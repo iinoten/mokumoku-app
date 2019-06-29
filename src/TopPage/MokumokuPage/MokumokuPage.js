@@ -65,11 +65,20 @@ class MokumokuPage extends Component{
       .then((querySnapshot)=>{
         querySnapshot.forEach((doc)=>{
           console.log("get places data", doc.id, "==>", doc.data())
-          this.setState({
-            near_place: update(this.state.near_place, {
-              $push: [doc.data().name]
+          let places_data = doc.data();
+          console.log(places_data)
+          if(
+            ( (places_data.position.lat <= (this.props.lat+0.001)) && (places_data.position.lat >= (this.props.lat-0.001)) )
+            &&
+            ( (places_data.position.lng <= (this.props.lng+0.001)) && (places_data.position.lng >= (this.props.lat-0.001)) )
+          ) {
+            console.log("nere here", places_data)
+            this.setState({
+              near_place: update(this.state.near_place, {
+                $push: [places_data.name]
+              })
             })
-          })
+          }
         })
       })
       .catch((err => {
@@ -226,7 +235,6 @@ class MokumokuPage extends Component{
     )
   }
   render(){
-    console.log("logging success", this.state.near_place)
     return(
       <div>
         <WordCard />
@@ -235,7 +243,7 @@ class MokumokuPage extends Component{
           onClick_submit={this.onClick_mokumoku_form_submit}
           mokumoku_h={this.state.count_h}
           mokumoku_min={this.state.count_min}
-          near_place={["モクモク部屋","スターバックス"]}
+          near_place={this.state.near_place}
           rating={3}/>
         <ConfirmAlert 
           mokumoku_h={this.state.count_h}
