@@ -22,6 +22,7 @@ class PopupReport extends Component{
       form_place_name: '',
       form_do_phrase: '',
       form_impression: '',
+      inference_place: null
     }
   }
   onClick_submit_button = () => {
@@ -54,24 +55,21 @@ class PopupReport extends Component{
     if (myStrong) strong = myStrong;
     return new Date().getTime().toString(16)  + Math.floor(strong*Math.random()).toString(16)
    }
-   onClick_inference_chip = (id) => {
-     console.log("helloooo", id)
-     firebase.firestore().collection('mokumoku_space').doc(id).get()
-      .then((doc)=>{
-        console.log(doc.data());
-        this.setState({
-          form_place_name: doc.data().name
-        })
-      })
-      .catch((err)=>{
-        console.warn("Failed get inference data:", err)
-      })
+   onClick_inference_delete_button = () => {
+     console.log("clicked delete button")
+     this.setState({ inference_place: null})
+   }
+   onClick_inference_chip = (data) => {
+     this.props.onClick_inference_chip(data.id);
+     this.setState({
+       inference_place: <Chip label={data.name} onDelete={this.onClick_inference_delete_button} variant="outlined" />
+     })
    }
   render(){
     let anti_place_chip = [];
     for (let i = 0; i < this.props.near_place.length; i++) {
        const element = this.props.near_place[i]; 
-       anti_place_chip.push(<Chip className="anti-place-chip" label={element.name} key={i} onClick={() => this.onClick_inference_chip(element.id)} />) 
+       anti_place_chip.push(<Chip className="anti-place-chip" label={element.name} key={i} onClick={() => this.onClick_inference_chip(element)} />) 
     }
     return(
       <div>
@@ -81,17 +79,22 @@ class PopupReport extends Component{
           <DialogContentText>
             {this.props.mokumoku_h + this.props.mokumoku_min}もくもくの成果はどうでしたか？ フォームに記録しましょう!
           </DialogContentText>
-          <TextField
-            value={this.state.form_place_name}
-            onChange={e=>this.onChange_place_name_form(e)}
-            autoFocus
-            margin="dense"
-            id="name"
-            label="もくもくした場所の名前"
-            helperText="例：スターバックス，コワーキングスペースの名前"
-            fullWidth
-            autoComplete="off"
-          />
+          {
+            this.state.inference_place ?
+              <div id="inference-input-chip">{this.state.inference_place}</div>
+            :
+              <TextField
+                value={this.state.form_place_name}
+                onChange={e=>this.onChange_place_name_form(e)}
+                autoFocus
+                margin="dense"
+                id="name"
+                label="もくもくした場所の名前"
+                helperText="例：スターバックス，コワーキングスペースの名前"
+                fullWidth
+                autoComplete="off"
+              />
+          }
           もしかして：{anti_place_chip}
           <TextField
             value={this.state.form_do_phrase}
