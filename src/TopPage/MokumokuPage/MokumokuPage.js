@@ -85,13 +85,26 @@ class MokumokuPage extends Component{
         console.log("Failed get places data:", err);
       }))
   }
+  //既存の場所にレビューを追加
   add_review_location_existing = (place_id, comment, rating, time) => {
+    let hiduke = new Date();
     firebase.firestore().collection('mokumoku_space').doc(place_id).get()
       .then((doc) => {
         let place_data = doc.data();
-        console.log("old_data ", place_data)
-        console.log("review over view",place_id, comment, rating, time)
+        console.log(place_data)
+        place_data.impressions = [...place_data.impressions, {
+          comment,
+          rating,
+          time: (time.h + Math.round(time.min/6)),
+          user_id: this.state.uid,
+          date: hiduke.getFullYear() + '/' + (hiduke.getMonth()+1) + '/' + hiduke.getDate()
+        }]
+        console.log("あたらしくつくった", place_data)
+        firebase.firestore().collection('mokumoku_space').doc(place_id).set(place_data)
+          .catch((err)=>console.log("既存の場所にレビューを保存できませんでした", err))
       })
+      .catch((err)=>console.log("既存の場所にレビューを追加できませんでした", err))
+      this.setState({ form_open:!this.state.form_open})
   }
   onClick_start_button_handler = () => {
     this.get_near_mokumoku_place();
@@ -150,6 +163,10 @@ class MokumokuPage extends Component{
   }
   onClick_inference_chip = (id, comment, rating, time) => {
     console.log("click chip:", id, comment, rating, time)
+    firebase.firestore().collection('mokumoku_space').doc(id).get()
+      .then((doc)=>{
+
+      })
   }
   onClick_mokumoku_form_submit = (done,  time_h, time_min, place_id, rating, impression, place_name) => {
     console.log("えらーーーーーー", Boolean(navigator.geolocation))
