@@ -43,7 +43,7 @@ class PopupReport extends Component{
       )
     } else {
       //既存の場所にレビューを追加
-      this.props.add_review(this.state.inference_place_id, this.state.form_impression)
+      this.props.add_review(this.state.inference_place_id, this.state.form_impression, this.state.rating, {h: this.props.mokumoku_h, min: this.props.mokumoku_min})
     }
   }
   onClick_star_rating = (rating) => {

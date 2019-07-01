@@ -85,12 +85,12 @@ class MokumokuPage extends Component{
         console.log("Failed get places data:", err);
       }))
   }
-  add_review_location_existing = (place_id, review_overview) => {
+  add_review_location_existing = (place_id, comment, rating, time) => {
     firebase.firestore().collection('mokumoku_space').doc(place_id).get()
       .then((doc) => {
         let place_data = doc.data();
         console.log("old_data ", place_data)
-        console.log("review over view", review_overview)
+        console.log("review over view",place_id, comment, rating, time)
       })
   }
   onClick_start_button_handler = () => {
@@ -148,8 +148,8 @@ class MokumokuPage extends Component{
       form_open: !this.state.form_open,
     })
   }
-  onClick_inference_chip = (id) => {
-    console.log("click chip:", id)
+  onClick_inference_chip = (id, comment, rating, time) => {
+    console.log("click chip:", id, comment, rating, time)
   }
   onClick_mokumoku_form_submit = (done,  time_h, time_min, place_id, rating, impression, place_name) => {
     console.log("えらーーーーーー", Boolean(navigator.geolocation))
