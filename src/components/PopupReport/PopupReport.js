@@ -22,21 +22,29 @@ class PopupReport extends Component{
       form_place_name: '',
       form_do_phrase: '',
       form_impression: '',
-      inference_place: null
+      inference_place: null,
+
+      add_review_mode: false, //trueで既存の場所にレビューの追加をするように
+      inference_place_id: null,
     }
   }
   onClick_submit_button = () => {
-    let place_unique_id = this.get_Unique_Str()
-    this.props.onClick_submit(
-      this.state.form_do_phrase,  //なにをもくもくしたか
-      this.props.mokumoku_h,      //何時間もくもくしたか
-      this.props.mokumoku_min,    //何分もくもくしたか
-      place_unique_id,
-      this.state.rating,
-      this.state.form_impression, //場所の感想
-      this.state.form_place_name, //場所の名前
-    )
-
+    //新規の場所を追加
+    if(!this.state.add_review_mode){
+      let place_unique_id = this.get_Unique_Str()
+      this.props.onClick_submit(
+        this.state.form_do_phrase,  //なにをもくもくしたか
+        this.props.mokumoku_h,      //何時間もくもくしたか
+        this.props.mokumoku_min,    //何分もくもくしたか
+        place_unique_id,
+        this.state.rating,
+        this.state.form_impression, //場所の感想
+        this.state.form_place_name, //場所の名前
+      )
+    } else {
+      //既存の場所にレビューを追加
+      this.props.add_review(this.state.inference_place_id, this.state.form_impression)
+    }
   }
   onClick_star_rating = (rating) => {
     this.setState({ rating })
@@ -57,12 +65,17 @@ class PopupReport extends Component{
    }
    onClick_inference_delete_button = () => {
      console.log("clicked delete button")
-     this.setState({ inference_place: null})
+     this.setState({ 
+       inference_place: null,
+       add_review_mode: false
+      })
    }
    onClick_inference_chip = (data) => {
      this.props.onClick_inference_chip(data.id);
      this.setState({
-       inference_place: <Chip label={data.name} onDelete={this.onClick_inference_delete_button} variant="outlined" />
+       inference_place: <Chip label={data.name} onDelete={this.onClick_inference_delete_button} variant="outlined" />,
+       add_review_mode: true,
+       inference_place_id: data.id
      })
    }
   render(){

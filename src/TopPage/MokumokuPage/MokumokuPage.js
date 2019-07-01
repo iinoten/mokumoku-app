@@ -64,14 +64,12 @@ class MokumokuPage extends Component{
     firebase.firestore().collection('mokumoku_space').get()
       .then((querySnapshot)=>{
         querySnapshot.forEach((doc)=>{
-          console.log("get places data", doc.id, "==>", doc.data())
           let places_data = doc.data();
           if(
             ((this.props.lat+0.001) >= places_data.position.lat) && ( places_data.position.lat >= (this.props.lat-0.001))
             &&
             ( (this.props.lng+0.001) >= places_data.position.lng ) && ( places_data.position.lng >= (this.props.lng-0.001))
           ) {
-            console.log("nere here")
             this.setState({
               near_place: update(this.state.near_place, {
                 $push: [{
@@ -86,6 +84,14 @@ class MokumokuPage extends Component{
       .catch((err => {
         console.log("Failed get places data:", err);
       }))
+  }
+  add_review_location_existing = (place_id, review_overview) => {
+    firebase.firestore().collection('mokumoku_space').doc(place_id).get()
+      .then((doc) => {
+        let place_data = doc.data();
+        console.log("old_data ", place_data)
+        console.log("review over view", review_overview)
+      })
   }
   onClick_start_button_handler = () => {
     this.get_near_mokumoku_place();
@@ -245,6 +251,7 @@ class MokumokuPage extends Component{
         <PopupReport 
           open={this.state.form_open}
           onClick_submit={this.onClick_mokumoku_form_submit}
+          add_review={this.add_review_location_existing}
           mokumoku_h={this.state.count_h}
           mokumoku_min={this.state.count_min}
           near_place={this.state.near_place}
