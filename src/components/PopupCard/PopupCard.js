@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import OutsideClickHandler from 'react-outside-click-handler';
+import firebase from 'firebase';
 
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -47,6 +48,10 @@ class PopupCard extends Component{
   }
   open_overview = () => {
     console.log("id is here:", this.props.id)
+    firebase.firestore().collection('mokumoku_space').doc(this.props.id).get()
+      .then((doc) => {
+        console.log("all impression is,", doc.data().impressions)
+      })
   }
   render(){
     return(
