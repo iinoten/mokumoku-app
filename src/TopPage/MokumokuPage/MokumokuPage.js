@@ -87,6 +87,7 @@ class MokumokuPage extends Component{
   }
   //既存の場所にレビューを追加
   add_review_location_existing = (place_id, comment, rating, time) => {
+    this.setState({near_place: []})
     let hiduke = new Date();
     firebase.firestore().collection('mokumoku_space').doc(place_id).get()
       .then((doc) => {
@@ -107,7 +108,6 @@ class MokumokuPage extends Component{
       this.setState({ form_open:!this.state.form_open})
   }
   onClick_start_button_handler = () => {
-    this.get_near_mokumoku_place();
     if(this.state.now_position.lat && this.state.now_position.lng){
       let uid;
       firebase.auth().onAuthStateChanged((user) => {
@@ -117,6 +117,7 @@ class MokumokuPage extends Component{
         }
       })
       if(this.state.uid){
+        this.get_near_mokumoku_place();
         console.log("UID!!!!!!!!!!!!!!!!!!!!!!!!!!!",this.state.uid)
         this.setState({
           counting_now: !this.state.counting_now,
@@ -171,7 +172,7 @@ class MokumokuPage extends Component{
   onClick_mokumoku_form_submit = (done,  time_h, time_min, place_id, rating, impression, place_name) => {
     console.log("えらーーーーーー", Boolean(navigator.geolocation))
     let time = new Date();
-    
+    this.setState({near_place: []})
     var temp_now_address;
     navigator.geolocation.getCurrentPosition((position) => {
       this.setState({now_position: {lat: position.coords.latitude, lng: position.coords.longitude}})
