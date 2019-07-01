@@ -45,6 +45,9 @@ class PopupCard extends Component{
       rating: newRating
     });
   }
+  open_overview = () => {
+    console.log("id is here:", this.props.id)
+  }
   render(){
     return(
       <div>
@@ -76,7 +79,7 @@ class PopupCard extends Component{
           </div>
         </CardContent>
         <CardActions>
-          <Button size="medium" onClick={console.log()}>詳細を見る</Button>
+          <Button size="medium" onClick={this.open_overview}>詳細を見る</Button>
           <CopyToClipboard
             text={this.props.address}
             onCopy={this.onClick_copy_button}>

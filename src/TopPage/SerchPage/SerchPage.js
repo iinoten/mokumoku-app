@@ -20,7 +20,8 @@ class SerchPage extends Component{
         place_title: '',
         all_time: 0,
         rating: 0,
-        address: ''
+        address: '',
+        id: ''
       }
     }
   }
@@ -44,6 +45,8 @@ class SerchPage extends Component{
       })
       .catch((err)=>console.log(err))
   }
+
+  //マーカーがクリックされた時の挙動
   onClick_marker_handler = (index) => {
     let place_data = this.state.mokumoku_place[index];
         let sum = function(arr, fn) { //合計値割り出し
@@ -56,7 +59,7 @@ class SerchPage extends Component{
             });
           }
         };
-        var average = function(arr, fn) {
+        let average = function(arr, fn) {
           return sum(arr, fn)/arr.length;
         };
         let all_time = [];
@@ -75,12 +78,14 @@ class SerchPage extends Component{
         place_title: place_data.data.name,
         ave_time: ave_time,
         rating: ave_rating,
-        address: place_data.data.address
+        address: place_data.data.address,
+        id: place_data.id
       }
     })
   }
+
   onClick_pop_close_button_handler = () => {
-    this.setState({popup_open_flag: false})
+    this.setState({popup_datapopup_open_flag: false})
   }
   render(){
     return(
@@ -96,6 +101,7 @@ class SerchPage extends Component{
           title={this.state.popup_data.place_title} 
           ave_time={this.state.popup_data.ave_time} 
           rating={this.state.popup_data.rating} 
+          id={this.state.popup_data.id}
           address={this.state.popup_data.address} />
       </div>
     );
