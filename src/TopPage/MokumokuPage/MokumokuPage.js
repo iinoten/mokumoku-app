@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import firebase from 'firebase'
 import axios from 'axios'
+import update from 'immutability-helper'
 
 import WordCard from '../../components/WordCard/WordCard'
 import StartButton from '../../components/StartButton/StartButton'
@@ -16,6 +17,8 @@ var perfect_address;
 class MokumokuPage extends Component{
   constructor(props){
     super(props);
+    console.log(props)
+    console.log("at constructor", this.props.uid)
     this.state = {
       count_s: 0,
       count_min: 0,
@@ -31,7 +34,9 @@ class MokumokuPage extends Component{
 
       uid: props.uid,
       now_address: '',
-      now_position: {lat: null, lng: null}
+      now_position: {lat: null, lng: null},
+
+      near_place: []
     }
   }
 
@@ -55,8 +60,55 @@ class MokumokuPage extends Component{
   count_down_cancelable = () => {
     if(this.state.cancelable_count > 0){this.setState({ cancelable_count: this.state.cancelable_count -1 })}
   }
+  get_near_mokumoku_place = (lat) => {  //付近の場所を取得
+    firebase.firestore().collection('mokumoku_space').get()
+      .then((querySnapshot)=>{
+        querySnapshot.forEach((doc)=>{
+          let places_data = doc.data();
+          if(
+            ((this.props.lat+0.001) >= places_data.position.lat) && ( places_data.position.lat >= (this.props.lat-0.001))
+            &&
+            ( (this.props.lng+0.001) >= places_data.position.lng ) && ( places_data.position.lng >= (this.props.lng-0.001))
+          ) {
+            this.setState({
+              near_place: update(this.state.near_place, {
+                $push: [{
+                  name: places_data.name,
+                  id: doc.id
+                }]
+              })
+            })
+          }
+        })
+      })
+      .catch((err => {
+        console.log("Failed get places data:", err);
+      }))
+  }
+  //既存の場所にレビューを追加
+  add_review_location_existing = (place_id, comment, rating, time) => {
+    let hiduke = new Date();
+    firebase.firestore().collection('mokumoku_space').doc(place_id).get()
+      .then((doc) => {
+        let place_data = doc.data();
+        console.log(place_data)
+        place_data.impressions = [...place_data.impressions, {
+          comment,
+          rating,
+          time: (time.h + Math.round(time.min/6)),
+          user_id: this.state.uid,
+          date: hiduke.getFullYear() + '/' + (hiduke.getMonth()+1) + '/' + hiduke.getDate()
+        }]
+        console.log("あたらしくつくった", place_data)
+        firebase.firestore().collection('mokumoku_space').doc(place_id).set(place_data)
+          .catch((err)=>console.log("既存の場所にレビューを保存できませんでした", err))
+      })
+      .catch((err)=>console.log("既存の場所にレビューを追加できませんでした", err))
+      this.setState({ form_open:!this.state.form_open})
+  }
   onClick_start_button_handler = () => {
-    if(navigator.geolocation){
+    this.get_near_mokumoku_place();
+    if(this.state.now_position.lat && this.state.now_position.lng){
       let uid;
       firebase.auth().onAuthStateChanged((user) => {
         if(user){
@@ -65,6 +117,7 @@ class MokumokuPage extends Component{
         }
       })
       if(this.state.uid){
+        console.log("UID!!!!!!!!!!!!!!!!!!!!!!!!!!!",this.state.uid)
         this.setState({
           counting_now: !this.state.counting_now,
           cancelable_count: 10
@@ -108,8 +161,15 @@ class MokumokuPage extends Component{
       form_open: !this.state.form_open,
     })
   }
+  onClick_inference_chip = (id, comment, rating, time) => {
+    console.log("click chip:", id, comment, rating, time)
+    firebase.firestore().collection('mokumoku_space').doc(id).get()
+      .then((doc)=>{
 
+      })
+  }
   onClick_mokumoku_form_submit = (done,  time_h, time_min, place_id, rating, impression, place_name) => {
+    console.log("えらーーーーーー", Boolean(navigator.geolocation))
     let time = new Date();
     
     var temp_now_address;
@@ -156,7 +216,7 @@ class MokumokuPage extends Component{
       .then((doc)=>{
         if(!doc.data()){
           firebase.firestore().collection('mokumoku_space').doc(place_id).set({
-            position: {lat: this.state.now_position.lat, lng: this.state.now_position.lng},
+            position: {lat:this.props.lat, lng: this.props.lng},
             impressions: [{
               comment: impression,
               date: time.getFullYear() + '/' + (time.getMonth()+1) + '/' + time.getDate(),
@@ -168,11 +228,13 @@ class MokumokuPage extends Component{
             name: place_name
           })
           .then(console.log("save place data"))
+          .catch(err=>console.log("Error, cant save place data", err))
         }
       })
       .catch((err)=>console.log(err))
   }
   componentDidMount(){
+    console.log("didmount", this.props.uid)
     navigator.geolocation.getCurrentPosition((position) => {
       this.setState({now_position: {lat: position.coords.latitude, lng: position.coords.longitude}})
       axios.get('https://maps.googleapis.com/maps/api/geocode/json?key=' + process.env.REACT_APP_GOOGLE_MAPS_API + '&latlng=' + position.coords.latitude + ',' + position.coords.longitude + '&sensor=false')
@@ -206,8 +268,11 @@ class MokumokuPage extends Component{
         <PopupReport 
           open={this.state.form_open}
           onClick_submit={this.onClick_mokumoku_form_submit}
+          add_review={this.add_review_location_existing}
           mokumoku_h={this.state.count_h}
           mokumoku_min={this.state.count_min}
+          near_place={this.state.near_place}
+          onClick_inference_chip={this.onClick_inference_chip}
           rating={3}/>
         <ConfirmAlert 
           mokumoku_h={this.state.count_h}

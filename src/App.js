@@ -15,23 +15,26 @@ class App extends Component{
   constructor(props){
     super(props)
     this.state = {
-      lat: 35.693825,
-      lng: 139.703356,
-      uid: null
+      lat: null,
+      lng: null,
     }
     firebase.initializeApp({
       apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
       authDomain:process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
       projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-    })
-    firebase.firestore().collection('test').doc('test').get()
-      .then((doc)=>{})
-  }
-  update_uid = (uid) => {
-    if(!this.state.uid){
-      alert('ログイン認証しました')
-      this.setState({ uid })
-    }
+    });
+    var new_uid;
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          console.log("ログイン済")
+          // User is signed in.
+          new_uid = user.uid;
+          console.log(user.uid)
+          this.state = {uid: user.uid}
+        } else {
+          // No user is signed in.
+        }
+      });
   }
   change_coordinate = (lat, lng) =>{
     this.setState({
@@ -40,23 +43,32 @@ class App extends Component{
     });
   }
   componentDidMount(){
+    console.log("appjs DidMount", this.state.uid)
     if(navigator.geolocation){
       navigator.geolocation.getCurrentPosition((position)=>{
-        this.setState({ lat: position.coords.latitude, lng: position.coords.longitude})
+        this.setState({ lat: this.state.lat, lng: this.state.lng})
       })
       navigator.geolocation.watchPosition((position)=>{
         this.setState({ lat: position.coords.latitude, lng: position.coords.longitude})
+        console.log(position.coords.latitude, position.coords.longitude)
       })
+    } else {
+      console.log("not found geo location")
     }
+    firebase.auth().onAuthStateChanged((user)=>{
+      this.setState({uid: user.uid})
+    })
   }
   render(){
+    console.log()
     return(
       <BrowserRouter>
         <div className='App'>
           <Switch>
             <Route exact path='/account' render={()=> <AccountPage test={"正解!!"} update_uid={this.update_uid} uid={this.state.uid} />} />
-            <Route path='/mokumoku' render={()=> <MokumokuPage uid={this.state.uid} />} />
+            {this.state.uid ? <Route path='/mokumoku' render={()=> <MokumokuPage lat={this.state.lat} lng={this.state.lng} uid={this.state.uid} />} /> : null }
             <Route path='/search' render={()=> <SerchPage lat={this.state.lat} lng={this.state.lng} />} />
+            {this.state.uid?<Redirect from='/' to='mokumoku' />:<Redirect from='/' to='account' />}
             <Redirect from='/' to='mokumoku' />
           </Switch>
           <BottomBar />
