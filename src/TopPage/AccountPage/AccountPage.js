@@ -65,7 +65,6 @@ class AccountPage extends Component{
         this.setState({
           user: user.uid
         })
-        this.props.update_uid(user.uid)
       }
     });
   }
