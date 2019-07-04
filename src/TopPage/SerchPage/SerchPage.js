@@ -45,7 +45,7 @@ class SerchPage extends Component{
       })
       .catch((err)=>console.log(err))
   }
-
+  
   //マーカーがクリックされた時の挙動
   onClick_marker_handler = (index) => {
     let place_data = this.state.mokumoku_place[index];

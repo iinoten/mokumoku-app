@@ -3,6 +3,8 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 import OutsideClickHandler from 'react-outside-click-handler';
 import firebase from 'firebase';
 
+import ImpressionDialog from '../ImpressionDialog/ImpressonDialog'
+
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -28,7 +30,8 @@ class PopupCard extends Component{
     this.state={
       copied: false,
       report_dialog: false,
-      star_rating: props.rating
+      star_rating: props.rating,
+      impression_dialog_open: false
     }
   }
   onClick_copy_button = () => {
@@ -47,15 +50,23 @@ class PopupCard extends Component{
     });
   }
   open_overview = () => {
+    this.setState({impression_dialog_open: true})
     console.log("id is here:", this.props.id)
     firebase.firestore().collection('mokumoku_space').doc(this.props.id).get()
       .then((doc) => {
         console.log("all impression is,", doc.data().impressions)
       })
   }
+  close_overview = () => {
+    this.setState({impression_dialog_open: false})
+  }
   render(){
     return(
       <div>
+        <ImpressionDialog 
+          open={this.state.impression_dialog_open}
+          close={this.close_overview}
+        />
       <Dialog
         open={this.state.report_dialog}
       >
