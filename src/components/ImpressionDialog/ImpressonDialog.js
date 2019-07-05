@@ -19,7 +19,6 @@ import './ImpressionDialog.css'
 class ImpressionDialog extends Component{
   constructor(props){
     super();
-    console.log(props.overview)
     this.state={
       overview: props.overview,
       test: []
@@ -27,18 +26,9 @@ class ImpressionDialog extends Component{
   }
   onClick_close_handler = () => {
     this.props.close()
-    console.log("power!!!!!!",this.props.overview)
-  }
-  componentDidMount(){
-    console.log("hhhhhhhhhhhhhhhhhhh",Boolean([].length))
   }
   componentWillReceiveProps(props){
-    console.log("~~~~~~~~~~~~~~~~~~~",props)
     this.setState({ impression_overview: props.overview })
-  }
-  getDerivedStateFromProps(){
-    console.log("power!!!!!!",this.props.overview)
-    console.log("fdjkgsduijgfioengiuh")
   }
   render(){
     let test = [];
@@ -51,13 +41,10 @@ class ImpressionDialog extends Component{
           let contributor_data = doc.data();
           icon_pict = contributor_data.icon_url ? contributor_data.icon_url : `${process.env.PUBLIC_URL}/picture/unknown_icon.png`;
           user_name = contributor_data.user_name ? contributor_data.user_name : "unknown";
-          console.log(icon_pict, user_name)
         })
         .catch((err)=>{
-          console.log("Failed get contributor data:", err);
           icon_pict = `${process.env.PUBLIC_URL}/picture/unknown_icon.png`;
           user_name = "unknown";
-          console.log(icon_pict, user_name)
         })
       
       impression  = element.comment;
@@ -70,7 +57,6 @@ class ImpressionDialog extends Component{
       }
       date        = element.date;
       time        = element.time;
-      console.log(icon_pict, user_name, impression, rating, date, time)
       test.push(
         <ListItem>
           <ListItemAvatar>
