@@ -7,6 +7,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
+import Typography from '@material-ui/core/Typography';
 
 import './ImpressionDialog.css'
 
@@ -38,26 +44,55 @@ class ImpressionDialog extends Component{
     let test = [];
     this.props.overview.forEach(element => {
       /**アイコンのURL 書き込み主の名前 口コミ 星評価 日付け 作業時間 */
-      let icon_pict, user_name, impression, rating, date, time;
+      let icon_pict, user_name, impression, rating = '', date, time;
       /**投稿者の情報取得 */
       firebase.firestore().collection('users').doc(element.user_id).get()
         .then((doc)=>{
           let contributor_data = doc.data();
-          icon_pict = contributor_data.icon_url ? contributor_data.icon_url : `${process.env.PUBLIC_URL}/picture/unknown_picture.png`;
-          user_name = contributor_data.user_name ? contributor_data.user_name : 'unknown';
+          icon_pict = contributor_data.icon_url ? contributor_data.icon_url : `${process.env.PUBLIC_URL}/picture/unknown_icon.png`;
+          user_name = contributor_data.user_name ? contributor_data.user_name : "unknown";
+          console.log(icon_pict, user_name)
         })
         .catch((err)=>{
           console.log("Failed get contributor data:", err);
-          icon_pict = `${process.env.PUBLIC_URL}/picture/unknown_picture.png`;
-          user_name = 'unknown';
+          icon_pict = `${process.env.PUBLIC_URL}/picture/unknown_icon.png`;
+          user_name = "unknown";
+          console.log(icon_pict, user_name)
         })
       
       impression  = element.comment;
-      rating      = element.rating;
+      for (let i = 0; i < 5; i++) {
+        if(element.rating > i ) {
+          rating += '★'
+        } else {
+          rating += '☆'
+        }
+      }
       date        = element.date;
       time        = element.time;
-      console.log(element)
-      test.push(element.comment)
+      console.log(icon_pict, user_name, impression, rating, date, time)
+      test.push(
+        <ListItem>
+          <ListItemAvatar>
+            <Avatar alt="Remy Sharp" src={`${process.env.PUBLIC_URL}/picture/unknown_icon.png`} />
+          </ListItemAvatar>
+          <ListItemText
+          primary={user_name ? user_name : 'unknown'}
+          secondary={
+            <React.Fragment>
+              <Typography
+                component="span"
+                variant="body2"
+                color="textPrimary"
+              >
+                {date + "　" + time}時間もくもくしました！
+              </Typography>
+              {rating + " — "+ impression}
+            </React.Fragment>
+          }
+        />
+        </ListItem>
+      )
     });
     return(
       <Dialog
@@ -66,13 +101,11 @@ class ImpressionDialog extends Component{
       >
         <DialogTitle>"テスト"の口コミ</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            {
-              test.map((element)=>{
-                return element
-              })
-            }
-          </DialogContentText>
+          <List>
+            {test.map((element)=>{
+              return element
+            })}
+          </List>
         </DialogContent>
         <DialogActions>
           <Button
