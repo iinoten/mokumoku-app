@@ -26,12 +26,14 @@ import './PopupCard.css'
 
 class PopupCard extends Component{
   constructor(props){
-    super();
+    super(props);
     this.state={
       copied: false,
       report_dialog: false,
       star_rating: props.rating,
-      impression_dialog_open: false
+      impression_dialog_open: false,
+
+      impression_overview: []
     }
   }
   onClick_copy_button = () => {
@@ -55,6 +57,7 @@ class PopupCard extends Component{
     firebase.firestore().collection('mokumoku_space').doc(this.props.id).get()
       .then((doc) => {
         console.log("all impression is,", doc.data().impressions)
+        this.setState({impression_overview: doc.data().impressions})
       })
   }
   close_overview = () => {
@@ -64,6 +67,7 @@ class PopupCard extends Component{
     return(
       <div>
         <ImpressionDialog 
+          overview={this.state.impression_overview}
           open={this.state.impression_dialog_open}
           close={this.close_overview}
         />
