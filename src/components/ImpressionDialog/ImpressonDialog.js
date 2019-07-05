@@ -52,7 +52,10 @@ class ImpressionDialog extends Component{
           user_name = 'unknown';
         })
       
-      impression = element.comment
+      impression  = element.comment;
+      rating      = element.rating;
+      date        = element.date;
+      time        = element.time;
       console.log(element)
       test.push(element.comment)
     });
