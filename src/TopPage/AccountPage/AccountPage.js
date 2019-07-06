@@ -31,6 +31,7 @@ class AccountPage extends Component{
           .then((doc)=>{
             if(!doc.data()){
               firebase.firestore().collection('users').doc(user.uid).set({
+                icon_url: user.photoURL.replace('normal.jpg', '400x400.jpg'),
                 name: user.displayName,
                 total_mokumoku_time: 0,
                 mokumoku_history: [],
