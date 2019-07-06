@@ -30,20 +30,24 @@ class PopupReport extends Component{
   }
   onClick_submit_button = () => {
     //新規の場所を追加
-    if(!this.state.add_review_mode){
-      let place_unique_id = this.get_Unique_Str()
-      this.props.onClick_submit(
-        this.state.form_do_phrase,  //なにをもくもくしたか
-        this.props.mokumoku_h,      //何時間もくもくしたか
-        this.props.mokumoku_min,    //何分もくもくしたか
-        place_unique_id,
-        this.state.rating,
-        this.state.form_impression, //場所の感想
-        this.state.form_place_name, //場所の名前
-      )
+    if((this.state.form_place_name || this.state.inference_place_id) && (this.state.form_do_phrase && this.state.form_impression)) {
+      if(!this.state.add_review_mode){
+        let place_unique_id = this.get_Unique_Str()
+        this.props.onClick_submit(
+          this.state.form_do_phrase,  //なにをもくもくしたか
+          this.props.mokumoku_h,      //何時間もくもくしたか
+          this.props.mokumoku_min,    //何分もくもくしたか
+          place_unique_id,
+          this.state.rating,
+          this.state.form_impression, //場所の感想
+          this.state.form_place_name, //場所の名前
+        )
+      } else {
+        //既存の場所にレビューを追加
+        this.props.add_review(this.state.inference_place_id, this.state.form_impression, this.state.rating, {h: this.props.mokumoku_h, min: this.props.mokumoku_min})
+      }
     } else {
-      //既存の場所にレビューを追加
-      this.props.add_review(this.state.inference_place_id, this.state.form_impression, this.state.rating, {h: this.props.mokumoku_h, min: this.props.mokumoku_min})
+      alert("必要項目を入力してください")
     }
   }
   onClick_star_rating = (rating) => {
@@ -67,7 +71,8 @@ class PopupReport extends Component{
      console.log("clicked delete button")
      this.setState({ 
        inference_place: null,
-       add_review_mode: false
+       add_review_mode: false,
+       inference_place_id: null
       })
    }
    onClick_inference_chip = (data) => {
