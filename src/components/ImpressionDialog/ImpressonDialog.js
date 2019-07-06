@@ -39,8 +39,8 @@ class ImpressionDialog extends Component{
       firebase.firestore().collection('users').doc(element.user_id).get()
         .then((doc)=>{
           let contributor_data = doc.data();
-          icon_pict = contributor_data.icon_url ? contributor_data.icon_url : `${process.env.PUBLIC_URL}/picture/unknown_icon.png`;
-          user_name = contributor_data.user_name ? contributor_data.user_name : "unknown";
+          icon_pict = contributor_data.icon_url;
+          user_name = contributor_data.name;
         })
         .catch((err)=>{
           icon_pict = `${process.env.PUBLIC_URL}/picture/unknown_icon.png`;
@@ -55,12 +55,13 @@ class ImpressionDialog extends Component{
           rating += '☆'
         }
       }
+      console.log(icon_pict, user_name)
       date        = element.date;
       time        = element.time;
       test.push(
         <ListItem>
           <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src={`${process.env.PUBLIC_URL}/picture/unknown_icon.png`} />
+            <Avatar alt="Remy Sharp" src={icon_pict} />
           </ListItemAvatar>
           <ListItemText
           primary={user_name ? user_name : 'unknown'}
